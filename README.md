@@ -2,6 +2,10 @@
 
 > *Digitální protipól k sociálním sítím. Diskrétní a bezpečný průvodce divočinou.*
 
+## Náhled
+
+![Registrační stránka BivouacHunter](spots/static/spots/img/bivouac-hunter-register-page.png)
+
 ---
 
 ## Proč BivouacHunter?
@@ -41,14 +45,24 @@ Projekt je ve fázi aktivního vývoje (MVP).
 - Django projekt a databázový model pro bivouac místa
 - Admin rozhraní pro správu spotů
 - Interaktivní mapa s turistickým podkladem mapy.cz
-- Filtrační panel (orientace, terén, voda, přístřešek)
+- Filtrační panel – dropdown menu (orientace, terén, voda, přístřešek, vítr, výška)
 - Popup s technickými parametry každého místa
+- Registrace a přihlášení (email + heslo)
+- Krásné auth stránky s lokální fotkou
+- Logout stránka
+- Avatar přihlášeného uživatele v navbaru
+- Oddělené statické soubory (CSS, JS)
+- Čistá struktura šablon
+- Čistá URL struktura (/login/, /signup/)
+- Čeština jako výchozí jazyk
 
 ### Plánováno 🔜
-- Aktuální počasí a předpověď pro každý spot (Open-Meteo API)
-- Registrace uživatelů – vlastní privátní spoty
-- Bezpečnostní funkce – check-in systém, propojení s chytrými hodinkami
-- Analýza terénu – zvýrazněné oblasti vhodné pro bivakování
+- Overpass API – přístřešky a prameny přímo z OSM
+- Google login
+- Barevné špendlíky podle terénu
+- Osobní privátní spoty pro přihlášeného uživatele
+- Počasí v popupu spotu (Open-Meteo API)
+- Bezpečnostní funkce – check-in systém
 
 ---
 
