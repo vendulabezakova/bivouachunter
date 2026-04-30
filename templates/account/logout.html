@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odhlášení – BivouacHunter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'spots/css/main.css' %}">
+</head>
+<body>
+<div class="auth-page">
+
+    <div class="auth-image">
+        <div class="auth-image-overlay"></div>
+        <div class="auth-image-text">
+            <h2>Dobrou noc. Spi klidně.</h2>
+            <p>Tvá místa na tebe čekají.<br>Vrať se když budeš chtít.</p>
+        </div>
+    </div>
+
+    <div class="auth-form-side">
+        <div class="auth-box">
+            <a href="/" class="auth-logo">Bivouac<span>Hunter</span></a>
+            <div class="auth-title">Byl jsi odhlášen.</div>
+            <div class="auth-subtitle">Díky za návštěvu. Příroda nikam neutíká. 🌲</div>
+
+            <a href="{% url 'account_login' %}" class="btn-submit" style="display:block; text-align:center; text-decoration:none; margin-top:32px;">
+                Přihlásit se znovu
+            </a>
+            <a href="/" class="btn-submit" style="display:block; text-align:center; text-decoration:none; margin-top:12px; background:#1c2b27; border: 0.5px solid #2e4a42;">
+                Zpět na mapu
+            </a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
