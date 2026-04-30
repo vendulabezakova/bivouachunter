@@ -4,7 +4,7 @@
 
 ## Náhled
 
-![Registrační stránka BivouacHunter](spots/static/spots/img/bivouac-hunter-register-page.png)
+![Registrační stránka BivouacHunter](bivouachunter/spots/static/spots/img/bivouac-hunter-register-page.png)
 
 ---
 
