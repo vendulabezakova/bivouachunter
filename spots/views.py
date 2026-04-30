@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.conf import settings
+from django.contrib.auth import logout
 from .models import Spot
 import json
 
@@ -41,3 +42,9 @@ def map_view(request):
         'spots_json': json.dumps(spots_data),
         'mapy_cz_api_key': settings.MAPY_CZ_API_KEY,
     })
+
+    from django.contrib.auth import logout
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'account/logout.html')
