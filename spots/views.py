@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.conf import settings
 from .models import Spot
 import json
 
@@ -17,4 +18,7 @@ def map_view(request):
             'wind_exposure': spot.wind_exposure,
             'elevation': spot.elevation,
         })
-    return render(request, 'spots/map.html', {'spots_json': json.dumps(spots_data)})
+    return render(request, 'spots/map.html', {
+        'spots_json': json.dumps(spots_data),
+        'mapy_cz_api_key': settings.MAPY_CZ_API_KEY,
+    })
