@@ -9,40 +9,178 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: sans-serif; }
         #map { height: 100vh; width: 100%; }
+
+        #filter-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            width: 220px;
+        }
+
+        #filter-panel h3 {
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #555;
+        }
+
+        .filter-group {
+            margin-bottom: 12px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 4px;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            background: #fafafa;
+        }
+
+        #filter-btn {
+            width: 100%;
+            padding: 8px;
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        #filter-btn:hover {
+            background: #1b4332;
+        }
+
+        #reset-btn {
+            width: 100%;
+            padding: 6px;
+            background: none;
+            color: #888;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        #reset-btn:hover {
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <div id="map"></div>
 
+    <div id="filter-panel">
+        <h3>🔍 Filtr</h3>
+
+        <div class="filter-group">
+            <label>Orientace svahu</label>
+            <select id="orientation">
+                <option value="">Vše</option>
+                <option value="N">Sever</option>
+                <option value="NE">Severovýchod</option>
+                <option value="E">Východ</option>
+                <option value="SE">Jihovýchod</option>
+                <option value="S">Jih</option>
+                <option value="SW">Jihozápad</option>
+                <option value="W">Západ</option>
+                <option value="NW">Severozápad</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Terén</label>
+            <select id="terrain">
+                <option value="">Vše</option>
+                <option value="forest">Les</option>
+                <option value="meadow">Louka</option>
+                <option value="rocky">Skalnatý terén</option>
+                <option value="mixed">Smíšený</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Zdroj vody</label>
+            <select id="water_max">
+                <option value="">Vše</option>
+                <option value="500">do 500 m</option>
+                <option value="1000">do 1 km</option>
+                <option value="2000">do 2 km</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Přístřešek</label>
+            <select id="shelter_max">
+                <option value="">Vše</option>
+                <option value="500">do 500 m</option>
+                <option value="1000">do 1 km</option>
+                <option value="2000">do 2 km</option>
+            </select>
+        </div>
+
+        <button id="filter-btn">Použít filtr</button>
+        <button id="reset-btn">Zrušit filtry</button>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://api.mapy.cz/loader.js"></script>
-    <script>
-        Loader.apiKey = '{{ mapy_cz_api_key }}';
-        Loader.load(null, { jak: true }, () => {
+    <script src="https://api.mapy.cz/v1/maplibre/maplibre-gl.js"></script>
+    <link href="https://api.mapy.cz/v1/maplibre/maplibre-gl.css" rel="stylesheet">
+   <script>
+    const map = L.map('map').setView([49.8, 15.5], 7);
 
-            const map = L.map('map').setView([49.8, 15.5], 7);
+    L.tileLayer(`https://api.mapy.cz/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey={{ mapy_cz_api_key }}`, {
+        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">© Mapy.cz</a>',
+        minZoom: 0,
+        maxZoom: 19,
+    }).addTo(map);
 
-            // Turistická mapa z mapy.cz
-            L.tileLayer(`https://api.mapy.cz/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey={{ mapy_cz_api_key }}`, {
-                attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">© Mapy.cz</a>',
-                minZoom: 0,
-                maxZoom: 19,
-            }).addTo(map);
+    const spots = {{ spots_json|safe }};
 
-            const spots = {{ spots_json|safe }};
+    spots.forEach(spot => {
+        const marker = L.marker([spot.lat, spot.lng]).addTo(map);
+        marker.bindPopup(`
+            <strong>${spot.name}</strong><br>
+            Terén: ${spot.terrain}<br>
+            Orientace: ${spot.orientation}<br>
+            Nadmořská výška: ${spot.elevation} m<br>
+            Voda: ${spot.water_nearby ? '✅ ' + spot.water_distance + ' m' : '❌'}<br>
+            Přístřešek: ${spot.shelter_nearby ? '✅ ' + spot.shelter_distance + ' m' : '❌'}<br>
+            Expozice větru: ${spot.wind_exposure}/5
+        `);
+    });
 
-            spots.forEach(spot => {
-                const marker = L.marker([spot.lat, spot.lng]).addTo(map);
-                marker.bindPopup(`
-                    <strong>${spot.name}</strong><br>
-                    Terén: ${spot.terrain}<br>
-                    Orientace: ${spot.orientation}<br>
-                    Nadmořská výška: ${spot.elevation} m<br>
-                    Voda: ${spot.water_nearby ? '✅ ' + spot.water_distance + ' m' : '❌'}<br>
-                    Expozice větru: ${spot.wind_exposure}/5
-                `);
-            });
-        });
-    </script>
-</body>
-</html>
+    document.getElementById('filter-btn').addEventListener('click', () => {
+        const params = new URLSearchParams();
+        const orientation = document.getElementById('orientation').value;
+        const terrain = document.getElementById('terrain').value;
+        const water = document.getElementById('water_max').value;
+        const shelter = document.getElementById('shelter_max').value;
+
+        if (orientation) params.append('orientation', orientation);
+        if (terrain) params.append('terrain', terrain);
+        if (water) params.append('water_max', water);
+        if (shelter) params.append('shelter_max', shelter);
+
+        window.location.href = '/?' + params.toString();
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+        window.location.href = '/';
+    });
+</script>

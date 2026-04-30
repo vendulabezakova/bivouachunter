@@ -34,6 +34,9 @@ class Spot(models.Model):
     water_nearby = models.BooleanField(default=False, help_text="Je poblíž zdroj vody?")
     water_distance = models.IntegerField(help_text="Vzdálenost od vody v metrech", null=True, blank=True)
     
+    shelter_nearby = models.BooleanField(default=False, help_text="Je poblíž přístřešek?")
+    shelter_distance = models.IntegerField(help_text="Vzdálenost od přístřešku v metrech", null=True, blank=True)
+    
     wind_exposure = models.IntegerField(
         help_text="Expozice větru 1-5 (1=chráněné, 5=velmi exponované)",
         null=True, blank=True
