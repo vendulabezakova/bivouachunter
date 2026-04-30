@@ -225,7 +225,7 @@
 }
 
 .auth-image {
-    background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=80');
+    background-image: url('/static/spots/img/bivouac-hunter-login.webp');
     background-size: cover;
     background-position: center;
     position: relative;
