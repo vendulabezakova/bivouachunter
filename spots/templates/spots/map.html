@@ -22,8 +22,16 @@
             </button>
         </div>
         <div class="nav-right">
-            <button class="btn-login">Přihlásit</button>
-            <button class="btn-register">Registrovat</button>
+            {% if user.is_authenticated %}
+                <div class="user-badge">
+                    <div class="user-avatar">{{ user.email|slice:":1"|upper }}</div>
+                    <span class="user-email">{{ user.email }}</span>
+                </div>
+                <a href="{% url 'account_logout' %}" class="btn-login">Odhlásit</a>
+            {% else %}
+                <a href="{% url 'account_login' %}" class="btn-login">Přihlásit</a>
+                <a href="{% url 'account_signup' %}" class="btn-register">Registrovat</a>
+            {% endif %}
         </div>
     </nav>
 

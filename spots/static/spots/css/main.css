@@ -216,3 +216,224 @@
             inset: 0;
             top: 68px;
         }
+
+        /* AUTH STRÁNKY */
+.auth-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.auth-image {
+    background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.auth-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(13,31,26,0.3), rgba(13,31,26,0.7));
+}
+
+.auth-image-text {
+    position: absolute;
+    bottom: 48px;
+    left: 40px;
+    right: 40px;
+}
+
+.auth-image-text h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #e0f0ec;
+    line-height: 1.3;
+    margin-bottom: 8px;
+}
+
+.auth-image-text p {
+    font-size: 15px;
+    color: #7aada0;
+    line-height: 1.6;
+}
+
+.auth-form-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 40px;
+    background: #0d1f1a;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 380px;
+}
+
+.auth-logo {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e0f0ec;
+    margin-bottom: 40px;
+    display: block;
+    text-decoration: none;
+}
+
+.auth-logo span { color: #1a6b57; }
+
+.auth-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #e0f0ec;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    font-size: 14px;
+    color: #7aada0;
+    margin-bottom: 32px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    color: #7aada0;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    background: #1c2b27;
+    color: #c8e8e2;
+    border: 0.5px solid #2e4a42;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Nunito', sans-serif;
+    transition: border-color 0.15s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1a6b57;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 13px;
+    background: #1a6b57;
+    border: none;
+    border-radius: 8px;
+    color: #e0f0ec;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 8px;
+}
+
+.btn-submit:hover { background: #155a48; }
+
+.btn-google {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 0.5px solid #2e4a42;
+    border-radius: 8px;
+    color: #c8e8e2;
+    font-size: 15px;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.btn-google:hover {
+    border-color: #4a7a6e;
+    background: #1c2b27;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    color: #4a7a6e;
+    font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: #2e4a42;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 14px;
+    color: #7aada0;
+}
+
+.auth-footer a {
+    color: #1a6b57;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover { text-decoration: underline; }
+
+.error-list {
+    background: #2d1a1a;
+    border: 0.5px solid #6b1a1a;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #e8a0a0;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #7aada0;
+}
+
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #1a6b57;
+    color: #e0f0ec;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #7aada0;
+}
