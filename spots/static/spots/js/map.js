@@ -356,7 +356,7 @@ function fetchWeather(lat, lng, popupElement) {
                     : realTime.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
 
                 weatherHtml += `
-                    <div style="display:grid; grid-template-columns: 48px 1fr; gap:4px; margin-bottom:8px; font-size:12px; align-items:center;">
+                    <div style="display:grid; grid-template-columns: 48px 1fr; gap:4px; margin-bottom:8px; font-size:12px; align-items:center; white-space:nowrap;">
                         <span style="color:#7aada0; font-weight:600;">${timeLabel}</span>
                         <div>
                             <span>${icon} ${temp}°C</span>
