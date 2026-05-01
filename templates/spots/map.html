@@ -16,11 +16,14 @@
     <nav class="navbar">
         <div class="logo">Bivouac<span>Hunter</span></div>
         <div class="nav-center">
-            <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">
-                🔍 Filtrovat
-                <span class="arrow">▾</span>
-            </button>
-        </div>
+    <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">
+        🔍 Filtrovat
+        <span class="arrow">▾</span>
+    </button>
+    <button class="filter-btn" id="locateBtn">
+        📍 Moje poloha
+    </button>
+</div>
         <div class="nav-right">
             {% if user.is_authenticated %}
                 <div class="user-badge">

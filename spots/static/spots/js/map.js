@@ -25,7 +25,38 @@ function toggleFilter() {
     const btn = document.getElementById('filterBtn');
     const dropdown = document.getElementById('filterDropdown');
     const overlay = document.getElementById('overlay');
-    const isOpen = dropdown.classList.contains('open');
+    const isOpen = dropdown.classLi// GEOLOKACE
+function locateUser() {
+    if (!navigator.geolocation) {
+        alert('Tvůj prohlížeč nepodporuje geolokaci.');
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            // Zazoomuj na polohu uživatele
+            map.setView([lat, lng], 13);
+
+            // Přidej marker polohy
+            const userMarker = L.circleMarker([lat, lng], {
+                radius: 10,
+                fillColor: '#c1603a',
+                color: '#faeee8',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.9
+            }).addTo(map);
+
+            userMarker.bindPopup('📍 Jsi tady').openPopup();
+        },
+        function(error) {
+            alert('Nepodařilo se zjistit tvou polohu. Zkontroluj nastavení prohlížeče.');
+        }
+    );
+}st.contains('open');
     if (isOpen) {
         closeFilter();
     } else {
@@ -80,3 +111,38 @@ function updateFilterBtn(count) {
         btn.innerHTML = '🔍 Filtrovat <span class="arrow">▾</span>';
     }
 }
+
+// GEOLOKACE
+function locateUser() {
+    if (!navigator.geolocation) {
+        alert('Tvůj prohlížeč nepodporuje geolokaci.');
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            // Zazoomuj na polohu uživatele
+            map.setView([lat, lng], 13);
+
+            // Přidej marker polohy
+            const userMarker = L.circleMarker([lat, lng], {
+                radius: 10,
+                fillColor: '#c1603a',
+                color: '#faeee8',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.9
+            }).addTo(map);
+
+            userMarker.bindPopup('📍 Jsi tady').openPopup();
+        },
+        function(error) {
+            alert('Nepodařilo se zjistit tvou polohu. Zkontroluj nastavení prohlížeče.');
+        }
+    );
+}
+
+document.getElementById('locateBtn').addEventListener('click', locateUser);
