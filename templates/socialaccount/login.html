@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přihlášení přes Google – BivouacHunter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'spots/css/main.css' %}">
+</head>
+<body>
+<div class="auth-page">
+
+    <div class="auth-image">
+        <div class="auth-image-overlay"></div>
+        <div class="auth-image-text">
+            <h2>Najdi své místo v divočině.</h2>
+            <p>Diskrétní průvodce pro solo hikery.<br>Žádné sdílení, jen klid a příroda.</p>
+        </div>
+    </div>
+
+    <div class="auth-form-side">
+        <div class="auth-box">
+            <a href="/" class="auth-logo">Bivouac<span>Hunter</span></a>
+            <div class="auth-title">Přihlášení přes Google</div>
+            <div class="auth-subtitle">Chystáš se přihlásit pomocí Google účtu.</div>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn-submit">Pokračovat</button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="{% url 'account_login' %}">Zpět na přihlášení</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

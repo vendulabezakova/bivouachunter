@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokončení registrace – BivouacHunter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'spots/css/main.css' %}">
+</head>
+<body>
+<div class="auth-page">
+
+    <div class="auth-image">
+        <div class="auth-image-overlay"></div>
+        <div class="auth-image-text">
+            <h2>Už jen krůček.</h2>
+            <p>Potvrď svůj účet a začni hledat svá místa.</p>
+        </div>
+    </div>
+
+    <div class="auth-form-side">
+        <div class="auth-box">
+            <a href="/" class="auth-logo">Bivouac<span>Hunter</span></a>
+            <div class="auth-title">Dokončení registrace</div>
+            <div class="auth-subtitle">Přihlašuješ se přes Google účet. Potvrď prosím svůj e-mail.</div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" name="email" value="{{ form.email.value }}" placeholder="tvuj@email.cz">
+                </div>
+                <button type="submit" class="btn-submit">Dokončit registraci</button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="/">Zpět na mapu</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
