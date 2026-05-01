@@ -34,6 +34,9 @@ BivouacHunter je odpovědí na obojí. Namísto sdílení *instafriendly* souřa
 - **Databáze:** SQLite (vývoj)
 - **Mapa:** Leaflet.js + Mapy.cz API
 - **Frontend:** HTML, CSS, JavaScript
+- **Geodata:** Overpass API (OpenStreetMap)
+- **Počasí:** Open-Meteo API
+- **Autentizace:** django-allauth (email + Google OAuth)
 
 ---
 
