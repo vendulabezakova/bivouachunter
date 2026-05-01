@@ -71,3 +71,26 @@ def overpass_proxy(request):
             return JsonResponse({'elements': []})
     except Exception as e:
         return JsonResponse({'elements': [], 'error': str(e)})
+
+def weather_proxy(request):
+    lat = request.GET.get('lat')
+    lng = request.GET.get('lng')
+    
+    if not lat or not lng:
+        return JsonResponse({'error': 'missing coordinates'}, status=400)
+    
+    try:
+        response = requests.get(
+            'https://api.open-meteo.com/v1/forecast',
+            params={
+                'latitude': lat,
+                'longitude': lng,
+                'hourly': 'temperature_2m,precipitation,windspeed_10m,winddirection_10m,weathercode',
+                'forecast_days': 1,
+                'timezone': 'Europe/Prague',
+            },
+            timeout=10
+        )
+        return JsonResponse(response.json())
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

@@ -123,7 +123,6 @@ function locateUser() {
 
             userMarker.bindPopup('📍 Jsi tady').openPopup();
 
-            fetchPOI(lat, lng, 2000);
         },
         function(error) {
             alert('Nepodařilo se zjistit tvou polohu. Zkontroluj nastavení prohlížeče.');
@@ -183,10 +182,20 @@ function fetchPOI(lat, lng, radiusM) {
 
                 const name = el.tags.name || (type === 'spring' || type === 'drinking_water' ? 'Zdroj vody' : 'Přístřešek');
 
-                marker.bindPopup(`
-                    <strong>${icon} ${name}</strong><br>
-                    <span style="color:#7aada0; font-size:12px;">${type}</span>
-                `);
+                const popupContent = document.createElement('div');
+                    popupContent.style.minWidth = '260px';
+                    popupContent.innerHTML = `
+                        <strong>${icon} ${name}</strong><br>
+                        <span style="font-size:12px; color:#7aada0;">${getTypeName(type)}</span>
+                        <div style="font-size:11px; color:#4a7a6e; margin-top:4px;">⏳ Načítám počasí...</div>
+                    `;
+
+                const popup = L.popup().setContent(popupContent);
+                marker.bindPopup(popup);
+
+                marker.on('popupopen', function() {
+                    fetchWeather(el.lat, el.lon, popupContent);
+                });
 
                 poiMarkers.push(marker);
             });
@@ -255,10 +264,20 @@ function fetchPOIFiltered(lat, lng, waterRadius, shelterRadius) {
 
                 const name = el.tags.name || (type === 'spring' || type === 'drinking_water' ? 'Zdroj vody' : 'Přístřešek');
 
-                marker.bindPopup(`
-                    <strong>${icon} ${name}</strong><br>
-                    <span style="font-size:12px; color:#7aada0;">${type}</span>
-                `);
+                const popupContent = document.createElement('div');
+                    popupContent.style.minWidth = '260px';
+                    popupContent.innerHTML = `
+                        <strong>${icon} ${name}</strong><br>
+                        <span style="font-size:12px; color:#7aada0;">${getTypeName(type)}</span>
+                        <div style="font-size:11px; color:#4a7a6e; margin-top:4px;">⏳ Načítám počasí...</div>
+                    `;
+
+                const popup = L.popup().setContent(popupContent);
+                marker.bindPopup(popup);
+
+                marker.on('popupopen', function() {
+                    fetchWeather(el.lat, el.lon, popupContent);
+                });
 
                 poiMarkers.push(marker);
             });
@@ -272,4 +291,140 @@ function fetchPOIFiltered(lat, lng, waterRadius, shelterRadius) {
         });
 }
 
+// POČASÍ
+function degreesToDirection(deg) {
+    const dirs = ['S', 'SSV', 'SV', 'VSV', 'V', 'VJV', 'JV', 'JJV', 'J', 'JJZ', 'JZ', 'ZJZ', 'Z', 'ZSZ', 'SZ', 'SSZ'];
+    return dirs[Math.round(deg / 22.5) % 16];
+}
+
+function weatherCodeToIcon(code) {
+    if (code === 0) return '☀️';
+    if (code <= 2) return '🌤️';
+    if (code <= 3) return '☁️';
+    if (code <= 48) return '🌫️';
+    if (code <= 57) return '🌧️';
+    if (code <= 67) return '🌧️';
+    if (code <= 77) return '❄️';
+    if (code <= 82) return '🌧️';
+    if (code <= 86) return '❄️';
+    if (code <= 99) return '⛈️';
+    return '🌡️';
+}
+
+function getTypeName(type) {
+    const names = {
+        'lean_to': 'Přístřešek',
+        'wilderness_hut': 'Horská chata',
+        'alpine_hut': 'Alpská chata',
+        'shelter': 'Přístřešek',
+        'spring': 'Pramen',
+        'drinking_water': 'Pitná voda',
+    };
+    return names[type] || type;
+}
+
+function fetchWeather(lat, lng, popupElement) {
+    fetch(`/api/weather/?lat=${lat}&lng=${lng}`)
+        .then(r => r.json())
+        .then(data => {
+            const now = new Date();
+            const hours = data.hourly;
+            const times = hours.time;
+
+            let currentIdx = 0;
+            for (let i = 0; i < times.length; i++) {
+                if (new Date(times[i]) <= now) currentIdx = i;
+            }
+
+            const offsets = [0, 3, 6, 12];
+            let weatherHtml = `
+                <div style="margin-top:10px; border-top:0.5px solid #2e4a42; padding-top:8px; min-width:220px;">
+            `;
+
+            offsets.forEach(offset => {
+                const idx = Math.min(currentIdx + offset, times.length - 1);
+                const temp = Math.round(hours.temperature_2m[idx]);
+                const precip = hours.precipitation[idx];
+                const wind = Math.round(hours.windspeed_10m[idx]);
+                const windDir = degreesToDirection(hours.winddirection_10m[idx]);
+                const icon = weatherCodeToIcon(hours.weathercode[idx]);
+
+                // Reálný čas
+                const realTime = new Date(now.getTime() + offset * 60 * 60 * 1000);
+                const timeLabel = offset === 0 
+                    ? 'Teď' 
+                    : realTime.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+
+                weatherHtml += `
+                    <div style="display:grid; grid-template-columns: 48px 1fr; gap:4px; margin-bottom:8px; font-size:12px; align-items:center;">
+                        <span style="color:#7aada0; font-weight:600;">${timeLabel}</span>
+                        <div>
+                            <span>${icon} ${temp}°C</span>
+                            <span style="margin-left:8px;">💨 ${wind} km/h od ${windDir}</span>
+                            <span style="margin-left:8px; white-space:nowrap;">🌧 ${precip} mm</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            weatherHtml += '</div>';
+
+            // Odstraň "Načítám počasí..." a přidej data
+            const loading = popupElement.querySelector('div');
+            if (loading) loading.remove();
+            popupElement.innerHTML += weatherHtml;
+        })
+        .catch(err => {
+            console.error('Weather error:', err);
+        });
+}
+
 document.getElementById('locateBtn').addEventListener('click', locateUser);
+
+// HLEDAT V TÉTO OBLASTI
+let searchBtn = null;
+
+map.on('moveend', function() {
+    if (!searchBtn) {
+        searchBtn = document.createElement('button');
+        searchBtn.innerHTML = '🔍 Hledat v této oblasti';
+        searchBtn.style.cssText = `
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 8px 20px;
+            background: #1c2b27;
+            color: #c8e8e2;
+            border: 0.5px solid #4a7a6e;
+            border-radius: 20px;
+            font-size: 14px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(searchBtn);
+
+        searchBtn.addEventListener('click', function() {
+            const center = map.getCenter();
+            const water = document.getElementById('f-water').value;
+            const shelter = document.getElementById('f-shelter').value;
+
+            if (water || shelter) {
+                const waterRadius = water ? parseInt(water) : 0;
+                const shelterRadius = shelter ? parseInt(shelter) : 0;
+                fetchPOIFiltered(center.lat, center.lng, waterRadius, shelterRadius);
+            }
+
+            searchBtn.remove();
+            searchBtn = null;
+        });
+    }
+});
+
+// Automatická geolokace při načtení
+window.addEventListener('load', function() {
+    locateUser();
+});
