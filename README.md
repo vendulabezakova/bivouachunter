@@ -48,6 +48,7 @@ Projekt je ve fázi aktivního vývoje (MVP).
 - Filtrační panel – dropdown menu (orientace, terén, voda, přístřešek, vítr, výška)
 - Popup s technickými parametry každého místa
 - Registrace a přihlášení (email + heslo)
+- Google login přes OAuth
 - Krásné auth stránky s lokální fotkou
 - Logout stránka
 - Avatar přihlášeného uživatele v navbaru
@@ -55,14 +56,15 @@ Projekt je ve fázi aktivního vývoje (MVP).
 - Čistá struktura šablon
 - Čistá URL struktura (/login/, /signup/)
 - Čeština jako výchozí jazyk
+- Automatická geolokace při načtení
+- Overpass API – přístřešky a prameny z OSM
+- Počasí v popupu (Open-Meteo) – teplota, vítr, směr větru, srážky na 12h
 
 ### Plánováno 🔜
-- Overpass API – přístřešky a prameny přímo z OSM
-- Google login
-- Barevné špendlíky podle terénu
-- Osobní privátní spoty pro přihlášeného uživatele
-- Počasí v popupu spotu (Open-Meteo API)
-- Bezpečnostní funkce – check-in systém
+- Dva režimy hledání – u mé polohy vs. v této oblasti
+- Mobilní optimalizace
+- Privátní spoty pro přihlášeného uživatele
+- Analýza terénu – sklon a orientace svahu
 
 ---
 
