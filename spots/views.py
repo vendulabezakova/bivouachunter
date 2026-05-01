@@ -48,3 +48,26 @@ def map_view(request):
 def logout_view(request):
     logout(request)
     return render(request, 'account/logout.html')
+
+
+import requests
+from django.http import JsonResponse
+
+def overpass_proxy(request):
+    query = request.GET.get('query', '')
+    if not query:
+        return JsonResponse({'error': 'no query'}, status=400)
+    
+    try:
+        response = requests.get(
+            'https://overpass-api.de/api/interpreter',
+            params={'data': query},
+            timeout=30,
+            headers={'User-Agent': 'BivouacHunter/1.0'}
+        )
+        if response.status_code == 200 and response.text:
+            return JsonResponse(response.json())
+        else:
+            return JsonResponse({'elements': []})
+    except Exception as e:
+        return JsonResponse({'elements': [], 'error': str(e)})

@@ -25,38 +25,7 @@ function toggleFilter() {
     const btn = document.getElementById('filterBtn');
     const dropdown = document.getElementById('filterDropdown');
     const overlay = document.getElementById('overlay');
-    const isOpen = dropdown.classLi// GEOLOKACE
-function locateUser() {
-    if (!navigator.geolocation) {
-        alert('Tvůj prohlížeč nepodporuje geolokaci.');
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            // Zazoomuj na polohu uživatele
-            map.setView([lat, lng], 13);
-
-            // Přidej marker polohy
-            const userMarker = L.circleMarker([lat, lng], {
-                radius: 10,
-                fillColor: '#c1603a',
-                color: '#faeee8',
-                weight: 2,
-                opacity: 1,
-                fillOpacity: 0.9
-            }).addTo(map);
-
-            userMarker.bindPopup('📍 Jsi tady').openPopup();
-        },
-        function(error) {
-            alert('Nepodařilo se zjistit tvou polohu. Zkontroluj nastavení prohlížeče.');
-        }
-    );
-}st.contains('open');
+    const isOpen = dropdown.classList.contains('open');
     if (isOpen) {
         closeFilter();
     } else {
@@ -124,10 +93,8 @@ function locateUser() {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
 
-            // Zazoomuj na polohu uživatele
             map.setView([lat, lng], 13);
 
-            // Přidej marker polohy
             const userMarker = L.circleMarker([lat, lng], {
                 radius: 10,
                 fillColor: '#c1603a',
@@ -138,11 +105,81 @@ function locateUser() {
             }).addTo(map);
 
             userMarker.bindPopup('📍 Jsi tady').openPopup();
+
+            fetchPOI(lat, lng, 2000);
         },
         function(error) {
             alert('Nepodařilo se zjistit tvou polohu. Zkontroluj nastavení prohlížeče.');
         }
     );
+}
+
+// OVERPASS API
+let poiMarkers = [];
+
+function clearPOI() {
+    poiMarkers.forEach(m => map.removeLayer(m));
+    poiMarkers = [];
+}
+
+function fetchPOI(lat, lng, radiusM) {
+    clearPOI();
+
+    const query = `
+        [out:json][timeout:25];
+        (
+            node["tourism"="lean_to"](around:${radiusM},${lat},${lng});
+            node["tourism"="wilderness_hut"](around:${radiusM},${lat},${lng});
+            node["amenity"="shelter"](around:${radiusM},${lat},${lng});
+            node["natural"="spring"](around:${radiusM},${lat},${lng});
+            node["amenity"="drinking_water"](around:${radiusM},${lat},${lng});
+        );
+        out body;
+    `;
+
+    const url = `/api/overpass/?query=${encodeURIComponent(query)}`;
+    
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            data.elements.forEach(el => {
+                const type = el.tags.tourism || el.tags.amenity || el.tags.natural;
+                let color = '#1a6b57';
+                let icon = '🏕️';
+
+                if (type === 'spring' || type === 'drinking_water') {
+                    color = '#1a5a8a';
+                    icon = '💧';
+                } else {
+                    icon = '🛖';
+                }
+
+                const marker = L.circleMarker([el.lat, el.lon], {
+                    radius: 8,
+                    fillColor: color,
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.85
+                }).addTo(map);
+
+                const name = el.tags.name || (type === 'spring' || type === 'drinking_water' ? 'Zdroj vody' : 'Přístřešek');
+
+                marker.bindPopup(`
+                    <strong>${icon} ${name}</strong><br>
+                    <span style="color:#7aada0; font-size:12px;">${type}</span>
+                `);
+
+                poiMarkers.push(marker);
+            });
+
+            if (data.elements.length === 0) {
+                alert('V okolí nebyly nalezeny žádné přístřešky ani zdroje vody.');
+            }
+        })
+        .catch(err => {
+            console.error('Overpass API error:', err);
+        });
 }
 
 document.getElementById('locateBtn').addEventListener('click', locateUser);

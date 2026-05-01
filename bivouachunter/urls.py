@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('allauth.urls')),
     path('odhlasit/', views.logout_view, name='custom_logout'),
     path('', views.map_view, name='map'),
+    path('api/overpass/', views.overpass_proxy, name='overpass_proxy'),
 ]
