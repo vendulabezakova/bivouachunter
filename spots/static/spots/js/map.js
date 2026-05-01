@@ -69,7 +69,24 @@ function applyFilters() {
     let count = [orientation, terrain, water, shelter, wind, elevation].filter(Boolean).length;
     updateFilterBtn(count);
     closeFilter();
-    window.location.href = '/?' + params.toString();
+
+    // Pokud je vybraná voda nebo přístřešek, hledej přes Overpass
+    const center = map.getCenter();
+    const lat = center.lat;
+    const lng = center.lng;
+
+    if (water || shelter) {
+        const waterRadius = water ? parseInt(water) : 0;
+        const shelterRadius = shelter ? parseInt(shelter) : 0;
+        fetchPOIFiltered(lat, lng, waterRadius, shelterRadius);
+    } else {
+        clearPOI();
+    }
+
+    // Filtruj vlastní spoty přes URL
+    if (orientation || terrain || wind || elevation) {
+        window.location.href = '/?' + params.toString();
+    }
 }
 
 function updateFilterBtn(count) {
@@ -130,28 +147,29 @@ function fetchPOI(lat, lng, radiusM) {
         (
             node["tourism"="lean_to"](around:${radiusM},${lat},${lng});
             node["tourism"="wilderness_hut"](around:${radiusM},${lat},${lng});
-            node["amenity"="shelter"](around:${radiusM},${lat},${lng});
+            node["tourism"="alpine_hut"](around:${radiusM},${lat},${lng});
+            node["amenity"="shelter"]["shelter_type"="lean_to"](around:${radiusM},${lat},${lng});
+            node["amenity"="shelter"]["shelter_type"="basic_hut"](around:${radiusM},${lat},${lng});
+            node["amenity"="shelter"]["shelter_type"="weather_shelter"](around:${radiusM},${lat},${lng});
             node["natural"="spring"](around:${radiusM},${lat},${lng});
-            node["amenity"="drinking_water"](around:${radiusM},${lat},${lng});
+            node["amenity"="drinking_water"]["drinking_water"!="no"](around:${radiusM},${lat},${lng});
         );
         out body;
     `;
 
     const url = `/api/overpass/?query=${encodeURIComponent(query)}`;
-    
+
     fetch(url)
         .then(r => r.json())
         .then(data => {
             data.elements.forEach(el => {
                 const type = el.tags.tourism || el.tags.amenity || el.tags.natural;
                 let color = '#1a6b57';
-                let icon = '🏕️';
+                let icon = '🛖';
 
                 if (type === 'spring' || type === 'drinking_water') {
                     color = '#1a5a8a';
                     icon = '💧';
-                } else {
-                    icon = '🛖';
                 }
 
                 const marker = L.circleMarker([el.lat, el.lon], {
@@ -175,6 +193,78 @@ function fetchPOI(lat, lng, radiusM) {
 
             if (data.elements.length === 0) {
                 alert('V okolí nebyly nalezeny žádné přístřešky ani zdroje vody.');
+            }
+        })
+        .catch(err => {
+            console.error('Overpass API error:', err);
+        });
+}
+
+function fetchPOIFiltered(lat, lng, waterRadius, shelterRadius) {
+    clearPOI();
+
+    let queryParts = [];
+
+    if (waterRadius > 0) {
+        queryParts.push(`node["natural"="spring"](around:${waterRadius},${lat},${lng});`);
+        queryParts.push(`node["amenity"="drinking_water"]["drinking_water"!="no"](around:${waterRadius},${lat},${lng});`);
+    }
+
+    if (shelterRadius > 0) {
+        queryParts.push(`node["tourism"="lean_to"](around:${shelterRadius},${lat},${lng});`);
+        queryParts.push(`node["tourism"="wilderness_hut"](around:${shelterRadius},${lat},${lng});`);
+        queryParts.push(`node["tourism"="alpine_hut"](around:${shelterRadius},${lat},${lng});`);
+        queryParts.push(`node["amenity"="shelter"]["shelter_type"="lean_to"](around:${shelterRadius},${lat},${lng});`);
+        queryParts.push(`node["amenity"="shelter"]["shelter_type"="basic_hut"](around:${shelterRadius},${lat},${lng});`);
+        queryParts.push(`node["amenity"="shelter"]["shelter_type"="weather_shelter"](around:${shelterRadius},${lat},${lng});`);
+    }
+
+    if (queryParts.length === 0) return;
+
+    const query = `
+        [out:json][timeout:25];
+        (
+            ${queryParts.join('\n')}
+        );
+        out body;
+    `;
+
+    const url = `/api/overpass/?query=${encodeURIComponent(query)}`;
+
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            data.elements.forEach(el => {
+                const type = el.tags.tourism || el.tags.amenity || el.tags.natural;
+                let color = '#1a6b57';
+                let icon = '🛖';
+
+                if (type === 'spring' || type === 'drinking_water') {
+                    color = '#1a5a8a';
+                    icon = '💧';
+                }
+
+                const marker = L.circleMarker([el.lat, el.lon], {
+                    radius: 8,
+                    fillColor: color,
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.85
+                }).addTo(map);
+
+                const name = el.tags.name || (type === 'spring' || type === 'drinking_water' ? 'Zdroj vody' : 'Přístřešek');
+
+                marker.bindPopup(`
+                    <strong>${icon} ${name}</strong><br>
+                    <span style="font-size:12px; color:#7aada0;">${type}</span>
+                `);
+
+                poiMarkers.push(marker);
+            });
+
+            if (data.elements.length === 0) {
+                alert('V okolí nebyly nalezeny žádné výsledky pro zvolené filtry.');
             }
         })
         .catch(err => {
