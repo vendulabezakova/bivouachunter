@@ -44,6 +44,11 @@ function toggleFilter() {
     if (isOpen) {
         closeFilter();
     } else {
+        // Schovej "Hledat v této oblasti" když se otevře filtr
+        if (searchBtn) {
+            searchBtn.remove();
+            searchBtn = null;
+        }
         btn.classList.add('active');
         dropdown.classList.add('open');
         overlay.classList.add('open');
@@ -85,20 +90,26 @@ function applyFilters() {
     updateFilterBtn(count);
     closeFilter();
 
-    // Pokud je vybraná voda nebo přístřešek, hledej přes Overpass
-    const center = map.getCenter();
-    const lat = center.lat;
-    const lng = center.lng;
+    console.log('water:', water, 'shelter:', shelter);
 
     if (water || shelter) {
-        const waterRadius = water ? parseInt(water) : 0;
-        const shelterRadius = shelter ? parseInt(shelter) : 0;
-        fetchPOIFiltered(lat, lng, waterRadius, shelterRadius);
+        const center = map.getCenter();
+        const bounds = map.getBounds();
+        const ne = bounds.getNorthEast();
+        const sw = bounds.getSouthWest();
+        const latDiff = Math.abs(ne.lat - sw.lat);
+        const lngDiff = Math.abs(ne.lng - sw.lng);
+        const radiusM = Math.max(latDiff, lngDiff) * 55000;
+
+        console.log('radius:', radiusM);
+
+        const waterRadius = water ? radiusM : 0;
+        const shelterRadius = shelter ? radiusM : 0;
+        fetchPOIFiltered(center.lat, center.lng, waterRadius, shelterRadius);
     } else {
         clearPOI();
     }
 
-    // Filtruj vlastní spoty přes URL
     if (orientation || terrain || wind || elevation) {
         window.location.href = '/?' + params.toString();
     }
@@ -165,6 +176,8 @@ function fetchPOI(lat, lng, radiusM) {
             node["amenity"="shelter"]["shelter_type"="lean_to"](around:${radiusM},${lat},${lng});
             node["amenity"="shelter"]["shelter_type"="basic_hut"](around:${radiusM},${lat},${lng});
             node["amenity"="shelter"]["shelter_type"="weather_shelter"](around:${radiusM},${lat},${lng});
+            node["amenity"="shelter"]["shelter_type"="picnic_shelter"](around:${radiusM},${lat},${lng});
+            node["amenity"="shelter"][!"shelter_type"](around:${radiusM},${lat},${lng});
             node["natural"="spring"](around:${radiusM},${lat},${lng});
             node["amenity"="drinking_water"]["drinking_water"!="no"](around:${radiusM},${lat},${lng});
         );
@@ -176,6 +189,7 @@ function fetchPOI(lat, lng, radiusM) {
     fetch(url)
         .then(r => r.json())
         .then(data => {
+            console.log('Overpass výsledky:', data.elements.length, data.elements);
             data.elements.forEach(el => {
                 const type = el.tags.tourism || el.tags.amenity || el.tags.natural;
                 let color = '#1a6b57';
@@ -241,6 +255,8 @@ function fetchPOIFiltered(lat, lng, waterRadius, shelterRadius) {
         queryParts.push(`node["amenity"="shelter"]["shelter_type"="lean_to"](around:${shelterRadius},${lat},${lng});`);
         queryParts.push(`node["amenity"="shelter"]["shelter_type"="basic_hut"](around:${shelterRadius},${lat},${lng});`);
         queryParts.push(`node["amenity"="shelter"]["shelter_type"="weather_shelter"](around:${shelterRadius},${lat},${lng});`);
+        queryParts.push(`node["amenity"="shelter"]["shelter_type"="picnic_shelter"](around:${shelterRadius},${lat},${lng});`);
+        queryParts.push(`node["amenity"="shelter"][!"shelter_type"](around:${shelterRadius},${lat},${lng});`);
     }
 
     if (queryParts.length === 0) return;
@@ -400,6 +416,9 @@ document.getElementById('locateBtn').addEventListener('click', locateUser);
 let searchBtn = null;
 
 map.on('moveend', function() {
+    const dropdown = document.getElementById('filterDropdown');
+    if (dropdown.classList.contains('open')) return;
+
     if (!searchBtn) {
         searchBtn = document.createElement('button');
         searchBtn.innerHTML = '🔍 Hledat v této oblasti';
@@ -428,8 +447,15 @@ map.on('moveend', function() {
             const shelter = document.getElementById('f-shelter').value;
 
             if (water || shelter) {
-                const waterRadius = water ? parseInt(water) : 0;
-                const shelterRadius = shelter ? parseInt(shelter) : 0;
+                const bounds = map.getBounds();
+                const ne = bounds.getNorthEast();
+                const sw = bounds.getSouthWest();
+                const latDiff = Math.abs(ne.lat - sw.lat);
+                const lngDiff = Math.abs(ne.lng - sw.lng);
+                const radiusM = Math.max(latDiff, lngDiff) * 55000;
+
+                const waterRadius = water ? radiusM : 0;
+                const shelterRadius = shelter ? radiusM : 0;
                 fetchPOIFiltered(center.lat, center.lng, waterRadius, shelterRadius);
             }
 
@@ -466,3 +492,4 @@ if (navigator.geolocation) {
     map.setView([49.8, 15.5], 7);
     hideLoading();
 }
+
