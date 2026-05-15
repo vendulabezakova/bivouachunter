@@ -1,4 +1,19 @@
-const map = L.map('map').setView([49.8, 15.5], 7);
+const map = L.map('map', { zoomControl: true });
+
+// Zkus geolokaci hned při inicializaci mapy
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            map.setView([position.coords.latitude, position.coords.longitude], 13);
+        },
+        function() {
+            // Fallback pokud geolokace selže
+            map.setView([49.8, 15.5], 7);
+        }
+    );
+} else {
+    map.setView([49.8, 15.5], 7);
+}
 
 L.tileLayer(`https://api.mapy.cz/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${MAPY_CZ_API_KEY}`, {
     attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">© Mapy.cz</a>',
@@ -428,3 +443,26 @@ map.on('moveend', function() {
 window.addEventListener('load', function() {
     locateUser();
 });
+
+function hideLoading() {
+    const screen = document.getElementById('loading-screen');
+    screen.classList.add('hidden');
+    document.getElementById('map').style.opacity = '1';
+    setTimeout(() => screen.remove(), 400);
+}
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            map.setView([position.coords.latitude, position.coords.longitude], 13);
+            hideLoading();
+        },
+        function() {
+            map.setView([49.8, 15.5], 7);
+            hideLoading();
+        }
+    );
+} else {
+    map.setView([49.8, 15.5], 7);
+    hideLoading();
+}
