@@ -615,3 +615,143 @@
         top: 56px;
     }
 }
+
+    /* DESKTOP/MOBILE HELPERS */
+    .desktop-only { display: flex; }
+    .mobile-only { display: none; }
+
+    @media (max-width: 768px) {
+        .desktop-only { display: none !important; }
+        .mobile-only { display: flex !important; }
+    }
+
+    /* USER AVATAR GUEST */
+    .user-avatar-guest {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #2e4a42;
+        color: #c8e8e2;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    /* USER PANEL OVERLAY */
+    .user-panel-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 1999;
+    }
+
+    .user-panel-overlay.open {
+        display: block;
+    }
+
+    /* USER PANEL */
+    .user-panel {
+        position: fixed;
+        inset: 0;
+        background: #0d1f1a;
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        border-radius: 20px 20px 0 0;
+        padding: 24px;
+        top: auto;
+        max-height: 70vh;
+    }
+
+    .user-panel.open {
+        transform: translateY(0);
+    }
+
+    .user-panel-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-bottom: 20px;
+        border-bottom: 0.5px solid #2e4a42;
+        margin-bottom: 16px;
+    }
+
+    .user-panel-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #1a6b57;
+        color: #e0f0ec;
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .user-panel-email {
+        font-size: 15px;
+        color: #c8e8e2;
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .user-panel-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+    }
+
+    .user-panel-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 12px;
+        border-radius: 10px;
+        font-size: 16px;
+        color: #c8e8e2;
+        text-decoration: none;
+        font-family: 'Nunito', sans-serif;
+        transition: background 0.15s;
+    }
+
+    .user-panel-item:hover {
+        background: #1c2b27;
+    }
+
+    .coming-soon-item {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    .soon-tag {
+        font-size: 11px;
+        color: #c1603a;
+        background: #2d1a0e;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+
+    .logout-item {
+        color: #e8a0a0;
+        margin-top: 8px;
+    }
+
+    .user-panel-close {
+        width: 100%;
+        padding: 14px;
+        background: #1c2b27;
+        border: none;
+        border-radius: 10px;
+        color: #7aada0;
+        font-size: 15px;
+        font-family: 'Nunito', sans-serif;
+        cursor: pointer;
+        margin-top: 16px;
+    }

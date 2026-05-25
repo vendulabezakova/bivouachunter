@@ -72,25 +72,17 @@ function resetFilters() {
 
 function applyFilters() {
     const params = new URLSearchParams();
-    const orientation = document.getElementById('f-orientation').value;
-    const terrain = document.getElementById('f-terrain').value;
     const water = document.getElementById('f-water').value;
     const shelter = document.getElementById('f-shelter').value;
-    const wind = document.getElementById('f-wind').value;
     const elevation = document.getElementById('f-elevation').value;
 
-    if (orientation) params.append('orientation', orientation);
-    if (terrain) params.append('terrain', terrain);
     if (water) params.append('water_max', water);
     if (shelter) params.append('shelter_max', shelter);
-    if (wind) params.append('wind_max', wind);
     if (elevation) params.append('elevation_min', elevation);
 
-    let count = [orientation, terrain, water, shelter, wind, elevation].filter(Boolean).length;
+    let count = [water, shelter, elevation].filter(Boolean).length;
     updateFilterBtn(count);
     closeFilter();
-
-    console.log('water:', water, 'shelter:', shelter);
 
     if (water || shelter) {
         const center = map.getCenter();
@@ -101,8 +93,6 @@ function applyFilters() {
         const lngDiff = Math.abs(ne.lng - sw.lng);
         const radiusM = Math.max(latDiff, lngDiff) * 55000;
 
-        console.log('radius:', radiusM);
-
         const waterRadius = water ? radiusM : 0;
         const shelterRadius = shelter ? radiusM : 0;
         fetchPOIFiltered(center.lat, center.lng, waterRadius, shelterRadius);
@@ -110,7 +100,7 @@ function applyFilters() {
         clearPOI();
     }
 
-    if (orientation || terrain || wind || elevation) {
+    if (elevation) {
         window.location.href = '/?' + params.toString();
     }
 }
@@ -229,9 +219,9 @@ function fetchPOI(lat, lng, radiusM) {
                 poiMarkers.push(marker);
             });
 
-            if (data.elements.length === 0) {
-                alert('V okolí nebyly nalezeny žádné přístřešky ani zdroje vody.');
-            }
+                    if (data.elements.length === 0) {
+            showNoResults();
+        }
         })
         .catch(err => {
             console.error('Overpass API error:', err);
@@ -313,9 +303,9 @@ function fetchPOIFiltered(lat, lng, waterRadius, shelterRadius) {
                 poiMarkers.push(marker);
             });
 
-            if (data.elements.length === 0) {
-                alert('V okolí nebyly nalezeny žádné výsledky pro zvolené filtry.');
-            }
+                if (data.elements.length === 0) {
+                showNoResults();
+            }  
         })
         .catch(err => {
             console.error('Overpass API error:', err);
@@ -410,6 +400,28 @@ function fetchWeather(lat, lng, popupElement) {
         });
 }
 
+function showNoResults() {
+    const msg = document.createElement('div');
+    msg.innerHTML = '🔍 V okolí nic nenalezeno';
+    msg.style.cssText = `
+        position: fixed;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        padding: 10px 20px;
+        background: #1c2b27;
+        color: #c8e8e2;
+        border: 0.5px solid #4a7a6e;
+        border-radius: 20px;
+        font-size: 14px;
+        font-family: 'Nunito', sans-serif;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    `;
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 3000);
+}
+
 document.getElementById('locateBtn').addEventListener('click', locateUser);
 
 // HLEDAT V TÉTO OBLASTI
@@ -493,3 +505,12 @@ if (navigator.geolocation) {
     hideLoading();
 }
 
+function openUserPanel() {
+    document.getElementById('userPanel').classList.add('open');
+    document.getElementById('userPanelOverlay').classList.add('open');
+}
+
+function closeUserPanel() {
+    document.getElementById('userPanel').classList.remove('open');
+    document.getElementById('userPanelOverlay').classList.remove('open');
+}

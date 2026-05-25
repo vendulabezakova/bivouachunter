@@ -17,25 +17,65 @@
         <div class="logo">Bivouac<span>Hunter</span></div>
         <div class="nav-center">
     <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">
-        🔍 Filtrovat
+        Filtrovat
         <span class="arrow">▾</span>
     </button>
     <button class="filter-btn" id="locateBtn">
-        📍 Moje poloha
+        Moje poloha
     </button>
 </div>
         <div class="nav-right">
-            {% if user.is_authenticated %}
-                <div class="user-badge">
-                    <div class="user-avatar">{{ user.email|slice:":1"|upper }}</div>
-                    <span class="user-email">{{ user.email }}</span>
-                </div>
-                <a href="{% url 'custom_logout' %}" class="btn-login">Odhlásit</a>
-            {% else %}
-                <a href="{% url 'account_login' %}" class="btn-login">Přihlásit</a>
-                <a href="{% url 'account_signup' %}" class="btn-register">Registrovat</a>
-            {% endif %}
+    {% if user.is_authenticated %}
+        <div class="user-badge desktop-only">
+            <div class="user-avatar">{{ user.email|slice:":1"|upper }}</div>
+            <span class="user-email">{{ user.email }}</span>
         </div>
+        <a href="{% url 'custom_logout' %}" class="btn-login desktop-only">Odhlásit</a>
+        <div class="user-avatar mobile-only" onclick="openUserPanel()">{{ user.email|slice:":1"|upper }}</div>
+    {% else %}
+        <a href="{% url 'account_login' %}" class="btn-login desktop-only">Přihlásit</a>
+        <a href="{% url 'account_signup' %}" class="btn-register desktop-only">Registrovat</a>
+        <div class="user-avatar-guest mobile-only" onclick="openUserPanel()">👤</div>
+    {% endif %}
+</div>
+
+<!-- USER PANEL OVERLAY -->
+<div class="user-panel-overlay" id="userPanelOverlay" onclick="closeUserPanel()"></div>
+<div class="user-panel" id="userPanel">
+    {% if user.is_authenticated %}
+        <div class="user-panel-header">
+            <div class="user-panel-avatar">{{ user.email|slice:":1"|upper }}</div>
+            <div class="user-panel-email">{{ user.email }}</div>
+        </div>
+        <div class="user-panel-menu">
+            <a href="#" class="user-panel-item coming-soon-item">
+                Moje spoty
+                <span class="soon-tag">brzy</span>
+            </a>
+            <a href="#" class="user-panel-item coming-soon-item">
+                Nastavení
+                <span class="soon-tag">brzy</span>
+            </a>
+            <a href="{% url 'custom_logout' %}" class="user-panel-item logout-item">
+                Odhlásit se
+            </a>
+        </div>
+    {% else %}
+        <div class="user-panel-header">
+            <div class="user-panel-avatar">👤</div>
+            <div class="user-panel-email">Nejsi přihlášen</div>
+        </div>
+        <div class="user-panel-menu">
+            <a href="{% url 'account_login' %}" class="user-panel-item">
+                Přihlásit se
+            </a>
+            <a href="{% url 'account_signup' %}" class="user-panel-item">
+                Registrovat se
+            </a>
+        </div>
+    {% endif %}
+    <button class="user-panel-close" onclick="closeUserPanel()">Zavřít</button>
+</div>
     </nav>
 
     <div class="filter-dropdown" id="filterDropdown">
