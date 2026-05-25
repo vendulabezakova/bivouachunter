@@ -131,7 +131,7 @@
 
         .filter-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 16px;
             margin-bottom: 20px;
         }
@@ -548,5 +548,70 @@
 
     .auth-subtitle {
         color: #a0cdc5;
+    }
+}
+
+/* MOBILNÍ NAVBAR */
+@media (max-width: 768px) {
+    .navbar {
+        height: auto;
+        padding: 10px 16px;
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+
+    .logo {
+        font-size: 16px;
+        white-space: nowrap;
+    }
+
+    .nav-center {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .filter-btn {
+        font-size: 14px;
+        padding: 8px 14px;
+        white-space: nowrap;
+    }
+
+    .nav-right {
+        gap: 6px;
+    }
+
+    .btn-login {
+        font-size: 13px;
+        padding: 7px 12px;
+    }
+
+    .btn-register {
+        display: none;
+    }
+
+    .user-email {
+        display: none;
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    #map {
+        top: 56px;
+    }
+
+    .overlay {
+        top: 56px;
+    }
+
+    .filter-dropdown {
+        width: 100%;
+        left: 0;
+        transform: none;
+        border-radius: 0 0 14px 14px;
+        top: 56px;
     }
 }
