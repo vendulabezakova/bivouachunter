@@ -22,9 +22,11 @@ BivouacHunter je odpovědí na obojí. Namísto sdílení *instafriendly* souřa
 ## Co aplikace umí
 
 - 🗺️ **Turistická mapa** – podklad mapy.cz s turistickými značkami, pěšinami a vrstevnicemi
-- 📍 **Bivouac spoty** – místa s technickými parametry (terén, orientace svahu, zdroj vody, přístřešek, expozice větru, nadmořská výška)
-- 🔍 **Filtrování** – podle orientace, terénu, vzdálenosti od vody a přístřešku
+- 📍 **Automatická geolokace** – mapa se zazoomuje na tvou polohu při otevření
+- 🔍 **Hledání v okolí** – přístřešky a zdroje vody z OpenStreetMap v okolí nebo na viditelné ploše mapy
+- 🌤️ **Počasí v reálném čase** – předpověď na 12h pro každé místo (teplota, vítr, srážky)
 - 🔒 **Anonymita** – žádné sociální prvky, minimální sběr dat
+- 📱 **Mobilní design** – optimalizováno pro použití v terénu
 
 ---
 
@@ -48,51 +50,25 @@ Projekt je ve fázi aktivního vývoje (MVP).
 - Django projekt a databázový model pro bivouac místa
 - Admin rozhraní pro správu spotů
 - Interaktivní mapa s turistickým podkladem mapy.cz
-- Filtrační panel – dropdown menu (orientace, terén, voda, přístřešek, vítr, výška)
-- Popup s technickými parametry každého místa
-- Registrace a přihlášení (email + heslo)
-- Google login přes OAuth
-- Krásné auth stránky s lokální fotkou
-- Logout stránka
-- Avatar přihlášeného uživatele v navbaru
-- Oddělené statické soubory (CSS, JS)
-- Čistá struktura šablon
-- Čistá URL struktura (/login/, /signup/)
-- Čeština jako výchozí jazyk
 - Automatická geolokace při načtení
-- Overpass API – přístřešky a prameny z OSM
-- Počasí v popupu (Open-Meteo) – teplota, vítr, směr větru, srážky na 12h
+- Hledání přístřešků a pramenů přes Overpass API (OSM)
+- Tlačítko "Hledat v této oblasti" po pohybu mapou
+- Filtrační panel – zdroj vody, přístřešek, nadmořská výška
+- Počasí v popupu – teplota, vítr se směrem, srážky na 12h
+- Registrace a přihlášení (email + heslo + Google OAuth)
+- Auth stránky s fotkou na pozadí
+- Mobilní user panel (přihlášení, odhlášení, budoucí funkce)
+- Responzivní design pro mobil
+- Oddělené statické soubory (CSS, JS)
+- Čistá URL struktura (/login/, /signup/)
 
 ### Plánováno 🔜
-- Dva režimy hledání – u mé polohy vs. v této oblasti
-- Mobilní optimalizace
 - Privátní spoty pro přihlášeného uživatele
+- Heatmapa vhodných míst z DMT/lidarových dat
 - Analýza terénu – sklon a orientace svahu
-
----
-
-## Instalace (lokální vývoj)
-
-```bash
-git clone https://github.com/vendulabezakova/bivouachunter.git
-cd bivouachunter
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-Vytvoř soubor `.env` v kořeni projektu:
-
-```
-MAPY_CZ_API_KEY=tvůj_api_klíč
-```
-
-Spusť migraci a server:
-
-```bash
-python manage.py migrate
-python manage.py runserver
-```
+- Zakázané zóny (NP, rezervace) z AOPK dat
+- PWA + offline režim
+- Internacionalizace (EN jako výchozí jazyk)
 
 ---
 
