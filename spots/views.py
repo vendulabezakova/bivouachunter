@@ -5,6 +5,9 @@ from .models import Spot
 import json
 
 def map_view(request):
+    if not request.user.is_authenticated:
+        return render(request, 'spots/onboarding.html')
+        
     spots = Spot.objects.filter(is_public=True)
 
     # Filtry z URL parametrů

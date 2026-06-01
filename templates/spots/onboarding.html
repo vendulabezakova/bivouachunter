@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BivouacHunter – Najdi své místo pod hvězdami</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'spots/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'spots/css/onboarding.css' %}">
+</head>
+<body class="onboarding-body">
+
+    <div class="onboarding-bg">
+        <div class="onboarding-overlay"></div>
+    </div>
+
+    <div class="onboarding-content">
+
+        <div class="onboarding-logo">Bivouac<span>Hunter</span></div>
+
+        <div class="onboarding-hero">
+            <h1>Najdi své místo<br><em>pod hvězdami.</em></h1>
+            <p>Bivakuj tam, kde tě nikdo nebude rušit.</p>
+        </div>
+
+        <div class="onboarding-usps">
+            <div class="usp">
+                <div class="usp-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="usp-text">
+                    <strong>Automatické spoty</strong>
+                    <span>Z terénních dat, ne od komunity</span>
+                </div>
+            </div>
+            <div class="usp">
+                <div class="usp-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+                </div>
+                <div class="usp-text">
+                    <strong>Počasí pro každé místo</strong>
+                    <span>Předpověď přímo na souřadnicích</span>
+                </div>
+            </div>
+            <div class="usp">
+                <div class="usp-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                </div>
+                <div class="usp-text">
+                    <strong>Offline režim</strong>
+                    <span>Funguje i bez signálu</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="onboarding-cta">
+            <a href="{% url 'account_signup' %}" class="btn-onboarding-primary">Začít zdarma</a>
+            <a href="{% url 'account_login' %}" class="btn-onboarding-secondary">Už máš účet? Přihlásit se</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

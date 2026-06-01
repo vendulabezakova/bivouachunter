@@ -1,0 +1,164 @@
+.onboarding-body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Nunito', sans-serif;
+}
+
+.onboarding-bg {
+    position: fixed;
+    inset: 0;
+    background-image: url('/static/spots/img/bivouachunter-onboarding.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.onboarding-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(13,31,26,0.5) 0%, rgba(13,31,26,0.85) 100%);
+}
+
+.onboarding-content {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    width: 100%;
+    padding: 48px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 40px;
+}
+
+.onboarding-logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: #e0f0ec;
+    letter-spacing: -0.02em;
+}
+
+.onboarding-logo span { color: #1a6b57; }
+
+.onboarding-hero h1 {
+    font-size: 42px;
+    font-weight: 600;
+    color: #e0f0ec;
+    line-height: 1.15;
+    margin-bottom: 16px;
+}
+
+.onboarding-hero h1 em {
+    font-style: italic;
+    color: #7aada0;
+}
+
+.onboarding-hero p {
+    font-size: 17px;
+    color: #a0cdc5;
+    line-height: 1.6;
+}
+
+.onboarding-usps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.usp {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(28, 43, 39, 0.7);
+    border: 0.5px solid #2e4a42;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: left;
+}
+
+.usp-icon {
+    color: #7aada0;
+    flex-shrink: 0;
+}
+
+.usp-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.usp-text strong {
+    font-size: 15px;
+    color: #e0f0ec;
+    font-weight: 600;
+}
+
+.usp-text span {
+    font-size: 13px;
+    color: #7aada0;
+}
+
+.onboarding-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.btn-onboarding-primary {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: #c1603a;
+    color: #faeee8;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.15s;
+}
+
+.btn-onboarding-primary:hover { background: #a8512f; }
+
+.btn-onboarding-secondary {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #7aada0;
+    text-decoration: none;
+    padding: 8px;
+}
+
+.btn-onboarding-secondary:hover { color: #c8e8e2; }
+
+.onboarding-bg {
+    background-position: 20% 100%;
+}
+
+/* MOBILNÍ */
+@media (max-width: 768px) {
+    .onboarding-content {
+        padding: 40px 24px;
+        gap: 32px;
+        justify-content: flex-end;
+        min-height: 100vh;
+    }
+
+    .onboarding-hero h1 {
+        font-size: 32px;
+    }
+
+        .onboarding-bg {
+        background-position: 25% center;
+    
+    }
+}
+
