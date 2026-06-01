@@ -49,6 +49,7 @@ function toggleFilter() {
             searchBtn.remove();
             searchBtn = null;
         }
+        closeLayers();
         btn.classList.add('active');
         dropdown.classList.add('open');
         overlay.classList.add('open');
@@ -59,6 +60,7 @@ function closeFilter() {
     document.getElementById('filterBtn').classList.remove('active');
     document.getElementById('filterDropdown').classList.remove('open');
     document.getElementById('overlay').classList.remove('open');
+    if (typeof closeLayers === 'function') closeLayers();
 }
 
 function resetFilters() {
@@ -513,4 +515,95 @@ function openUserPanel() {
 function closeUserPanel() {
     document.getElementById('userPanel').classList.remove('open');
     document.getElementById('userPanelOverlay').classList.remove('open');
+}
+
+// =====================
+// LAYER PICKER
+// =====================
+
+// Vrstevnice (OpenTopoMap)
+const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenTopoMap (CC-BY-SA)',
+    maxZoom: 17,
+    opacity: 0.6
+});
+
+// Horská služba — Overpass layer group
+const rescueLayer = L.layerGroup();
+let rescueLoaded = false;
+
+function loadRescueStations() {
+    if (rescueLoaded) return;
+    rescueLoaded = true;
+
+    const center = map.getCenter();
+    const query = `
+        [out:json][timeout:25];
+        (
+            node["emergency"="mountain_rescue"](around:100000,${center.lat},${center.lng});
+            node["emergency"="rescue_station"](around:100000,${center.lat},${center.lng});
+        );
+        out body;
+    `;
+
+    fetch(`/api/overpass/?query=${encodeURIComponent(query)}`)
+        .then(r => r.json())
+        .then(data => {
+            data.elements.forEach(el => {
+                const marker = L.circleMarker([el.lat, el.lon], {
+                    radius: 9,
+                    fillColor: '#c0392b',
+                    color: '#ffffff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.9
+                });
+                const name = el.tags.name || 'Stanice horské služby';
+                marker.bindPopup(`<strong>🚑 ${name}</strong><br><span style="font-size:12px;color:#7aada0;">Horská záchranná služba</span>`);
+                rescueLayer.addLayer(marker);
+            });
+        })
+        .catch(err => console.error('Rescue stations error:', err));
+}
+
+function toggleLayer(name) {
+    if (name === 'topo') {
+        if (map.hasLayer(topoLayer)) {
+            map.removeLayer(topoLayer);
+        } else {
+            map.addLayer(topoLayer);
+        }
+    }
+    if (name === 'rescue') {
+        if (map.hasLayer(rescueLayer)) {
+            map.removeLayer(rescueLayer);
+        } else {
+            loadRescueStations();
+            map.addLayer(rescueLayer);
+        }
+    }
+}
+
+function toggleLayers() {
+    const btn = document.getElementById('layersBtn');
+    const dropdown = document.getElementById('layersDropdown');
+    const overlay = document.getElementById('overlay');
+    const isOpen = dropdown.classList.contains('open');
+
+    if (isOpen) {
+        closeLayers();
+    } else {
+        // Zavři filtr bez volání closeLayers
+        document.getElementById('filterBtn').classList.remove('active');
+        document.getElementById('filterDropdown').classList.remove('open');
+        btn.classList.add('active');
+        dropdown.classList.add('open');
+        overlay.classList.add('open');
+    }
+}
+
+function closeLayers() {
+    document.getElementById('layersBtn').classList.remove('active');
+    document.getElementById('layersDropdown').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
 }

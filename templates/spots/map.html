@@ -11,136 +11,181 @@
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="closeFilter()"></div>
+    <div class="overlay" id="overlay" onclick="closeFilter(); closeLayers();"></div>
 
     <nav class="navbar">
         <div class="logo">Bivouac<span>Hunter</span></div>
         <div class="nav-center">
-    <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">
-        Filtrovat
-        <span class="arrow">▾</span>
-    </button>
-    <button class="filter-btn" id="locateBtn">
-        Moje poloha
-    </button>
-</div>
+            <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">
+                Filtrovat
+                <span class="arrow">▾</span>
+            </button>
+            <button class="filter-btn" id="locateBtn">
+                Moje poloha
+            </button>
+            <button class="filter-btn" id="layersBtn" onclick="toggleLayers()">
+                Vrstvy
+                <span class="arrow">▾</span>
+            </button>
+        </div>
         <div class="nav-right">
-    {% if user.is_authenticated %}
-        <div class="user-badge desktop-only">
-            <div class="user-avatar">{{ user.email|slice:":1"|upper }}</div>
-            <span class="user-email">{{ user.email }}</span>
+            {% if user.is_authenticated %}
+                <div class="user-badge desktop-only">
+                    <div class="user-avatar">{{ user.email|slice:":1"|upper }}</div>
+                    <span class="user-email">{{ user.email }}</span>
+                </div>
+                <a href="{% url 'custom_logout' %}" class="btn-login desktop-only">Odhlásit</a>
+                <div class="user-avatar mobile-only" onclick="openUserPanel()">{{ user.email|slice:":1"|upper }}</div>
+            {% else %}
+                <a href="{% url 'account_login' %}" class="btn-login desktop-only">Přihlásit</a>
+                <a href="{% url 'account_signup' %}" class="btn-register desktop-only">Registrovat</a>
+                <div class="user-avatar-guest mobile-only" onclick="openUserPanel()">👤</div>
+            {% endif %}
         </div>
-        <a href="{% url 'custom_logout' %}" class="btn-login desktop-only">Odhlásit</a>
-        <div class="user-avatar mobile-only" onclick="openUserPanel()">{{ user.email|slice:":1"|upper }}</div>
-    {% else %}
-        <a href="{% url 'account_login' %}" class="btn-login desktop-only">Přihlásit</a>
-        <a href="{% url 'account_signup' %}" class="btn-register desktop-only">Registrovat</a>
-        <div class="user-avatar-guest mobile-only" onclick="openUserPanel()">👤</div>
-    {% endif %}
-</div>
 
-<!-- USER PANEL OVERLAY -->
-<div class="user-panel-overlay" id="userPanelOverlay" onclick="closeUserPanel()"></div>
-<div class="user-panel" id="userPanel">
-    {% if user.is_authenticated %}
-        <div class="user-panel-header">
-            <div class="user-panel-avatar">{{ user.email|slice:":1"|upper }}</div>
-            <div class="user-panel-email">{{ user.email }}</div>
+        <!-- USER PANEL OVERLAY -->
+        <div class="user-panel-overlay" id="userPanelOverlay" onclick="closeUserPanel()"></div>
+        <div class="user-panel" id="userPanel">
+            {% if user.is_authenticated %}
+                <div class="user-panel-header">
+                    <div class="user-panel-avatar">{{ user.email|slice:":1"|upper }}</div>
+                    <div class="user-panel-email">{{ user.email }}</div>
+                </div>
+                <div class="user-panel-menu">
+                    <a href="#" class="user-panel-item coming-soon-item">
+                        Moje spoty
+                        <span class="soon-tag">brzy</span>
+                    </a>
+                    <a href="#" class="user-panel-item coming-soon-item">
+                        Nastavení
+                        <span class="soon-tag">brzy</span>
+                    </a>
+                    <a href="{% url 'custom_logout' %}" class="user-panel-item logout-item">
+                        Odhlásit se
+                    </a>
+                </div>
+            {% else %}
+                <div class="user-panel-header">
+                    <div class="user-panel-avatar">👤</div>
+                    <div class="user-panel-email">Nejsi přihlášen</div>
+                </div>
+                <div class="user-panel-menu">
+                    <a href="{% url 'account_login' %}" class="user-panel-item">
+                        Přihlásit se
+                    </a>
+                    <a href="{% url 'account_signup' %}" class="user-panel-item">
+                        Registrovat se
+                    </a>
+                </div>
+            {% endif %}
+            <button class="user-panel-close" onclick="closeUserPanel()">Zavřít</button>
         </div>
-        <div class="user-panel-menu">
-            <a href="#" class="user-panel-item coming-soon-item">
-                Moje spoty
-                <span class="soon-tag">brzy</span>
-            </a>
-            <a href="#" class="user-panel-item coming-soon-item">
-                Nastavení
-                <span class="soon-tag">brzy</span>
-            </a>
-            <a href="{% url 'custom_logout' %}" class="user-panel-item logout-item">
-                Odhlásit se
-            </a>
-        </div>
-    {% else %}
-        <div class="user-panel-header">
-            <div class="user-panel-avatar">👤</div>
-            <div class="user-panel-email">Nejsi přihlášen</div>
-        </div>
-        <div class="user-panel-menu">
-            <a href="{% url 'account_login' %}" class="user-panel-item">
-                Přihlásit se
-            </a>
-            <a href="{% url 'account_signup' %}" class="user-panel-item">
-                Registrovat se
-            </a>
-        </div>
-    {% endif %}
-    <button class="user-panel-close" onclick="closeUserPanel()">Zavřít</button>
-</div>
     </nav>
 
     <div class="filter-dropdown" id="filterDropdown">
         <div class="filter-grid">
-    <div class="filter-group">
-        <label>Zdroj vody</label>
-        <select id="f-water">
-            <option value="">Vše</option>
-            <option value="500">do 500 m</option>
-            <option value="1000">do 1 km</option>
-            <option value="2000">do 2 km</option>
-        </select>
-    </div>
-    <div class="filter-group">
-        <label>Přístřešek</label>
-        <select id="f-shelter">
-            <option value="">Vše</option>
-            <option value="500">do 500 m</option>
-            <option value="1000">do 1 km</option>
-            <option value="2000">do 2 km</option>
-        </select>
-    </div>
-    <div class="filter-group">
-        <label>Nadm. výška (min. m)</label>
-        <input type="number" id="f-elevation" placeholder="např. 800" min="0" max="2500">
-    </div>
-    <div class="filter-group" style="opacity: 0.4;">
-        <label>Orientace svahu</label>
-        <select id="f-orientation" disabled>
-            <option value="">– již brzy –</option>
-            <option value="N">Sever</option>
-            <option value="NE">Severovýchod</option>
-            <option value="E">Východ</option>
-            <option value="SE">Jihovýchod</option>
-            <option value="S">Jih</option>
-            <option value="SW">Jihozápad</option>
-            <option value="W">Západ</option>
-            <option value="NW">Severozápad</option>
-        </select>
-    </div>
-    <div class="filter-group" style="opacity: 0.4;">
-        <label>Terén</label>
-        <select id="f-terrain" disabled>
-            <option value="">– již brzy –</option>
-            <option value="forest">Les</option>
-            <option value="meadow">Louka</option>
-            <option value="rocky">Skalnatý terén</option>
-            <option value="mixed">Smíšený</option>
-        </select>
-    </div>
-    <div class="filter-group" style="opacity: 0.4;">
-        <label>Expozice větru</label>
-        <select id="f-wind" disabled>
-            <option value="">– již brzy –</option>
-            <option value="1">1 – velmi chráněné</option>
-            <option value="2">2 – chráněné</option>
-            <option value="3">3 – střední</option>
-            <option value="4">4 – exponované</option>
-            <option value="5">5 – velmi exponované</option>
-        </select>
-    </div>
-</div>
+            <div class="filter-group">
+                <label>Zdroj vody</label>
+                <select id="f-water">
+                    <option value="">Vše</option>
+                    <option value="500">do 500 m</option>
+                    <option value="1000">do 1 km</option>
+                    <option value="2000">do 2 km</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Přístřešek</label>
+                <select id="f-shelter">
+                    <option value="">Vše</option>
+                    <option value="500">do 500 m</option>
+                    <option value="1000">do 1 km</option>
+                    <option value="2000">do 2 km</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Nadm. výška (min. m)</label>
+                <input type="number" id="f-elevation" placeholder="např. 800" min="0" max="2500">
+            </div>
+            <div class="filter-group" style="opacity: 0.4;">
+                <label>Orientace svahu</label>
+                <select id="f-orientation" disabled>
+                    <option value="">– již brzy –</option>
+                    <option value="N">Sever</option>
+                    <option value="NE">Severovýchod</option>
+                    <option value="E">Východ</option>
+                    <option value="SE">Jihovýchod</option>
+                    <option value="S">Jih</option>
+                    <option value="SW">Jihozápad</option>
+                    <option value="W">Západ</option>
+                    <option value="NW">Severozápad</option>
+                </select>
+            </div>
+            <div class="filter-group" style="opacity: 0.4;">
+                <label>Terén</label>
+                <select id="f-terrain" disabled>
+                    <option value="">– již brzy –</option>
+                    <option value="forest">Les</option>
+                    <option value="meadow">Louka</option>
+                    <option value="rocky">Skalnatý terén</option>
+                    <option value="mixed">Smíšený</option>
+                </select>
+            </div>
+            <div class="filter-group" style="opacity: 0.4;">
+                <label>Expozice větru</label>
+                <select id="f-wind" disabled>
+                    <option value="">– již brzy –</option>
+                    <option value="1">1 – velmi chráněné</option>
+                    <option value="2">2 – chráněné</option>
+                    <option value="3">3 – střední</option>
+                    <option value="4">4 – exponované</option>
+                    <option value="5">5 – velmi exponované</option>
+                </select>
+            </div>
+        </div>
         <div class="filter-footer">
             <button class="btn-reset" onclick="resetFilters()">Zrušit všechny filtry</button>
             <button class="btn-apply" onclick="applyFilters()">Zobrazit místa</button>
+        </div>
+    </div>
+
+    <div class="filter-dropdown" id="layersDropdown">
+        <div class="layers-grid">
+            <div class="layer-item">
+                <label>
+                    <input type="checkbox" id="l-topo" onchange="toggleLayer('topo')">
+                    Vrstevnice
+                </label>
+            </div>
+            <div class="layer-item">
+                <label>
+                    <input type="checkbox" id="l-rescue" onchange="toggleLayer('rescue')">
+                    Stanice horské služby
+                </label>
+            </div>
+            <div class="layer-item disabled">
+                <label>
+                    <input type="checkbox" disabled>
+                    Spoty na spaní <span class="soon-tag">brzy</span>
+                </label>
+            </div>
+            <div class="layer-item disabled">
+                <label>
+                    <input type="checkbox" disabled>
+                    Radar <span class="soon-tag">brzy</span>
+                </label>
+            </div>
+            <div class="layer-item disabled">
+                <label>
+                    <input type="checkbox" disabled>
+                    Proudění vzduchu <span class="soon-tag">brzy</span>
+                </label>
+            </div>
+            <div class="layer-item disabled">
+                <label>
+                    <input type="checkbox" disabled>
+                    Zakázané zóny <span class="soon-tag">brzy</span>
+                </label>
+            </div>
         </div>
     </div>
 
