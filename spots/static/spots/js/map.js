@@ -105,6 +105,8 @@ function applyFilters() {
     if (elevation) {
         window.location.href = '/?' + params.toString();
     }
+    // Aktualizuj aktivní filtry lištu
+    updateActiveFilterBar();
 }
 
 function updateFilterBtn(count) {
@@ -424,6 +426,79 @@ function showNoResults() {
     setTimeout(() => msg.remove(), 3000);
 }
 
+// MOCKUP HEATMAPA - testovací data pro prezentaci
+const mockSpots = [
+    { lat: 50.0869, lng: 17.2316, score: 'green', name: 'Sedlo pod Pradědem', elevation: 1380, slope: 2, orientation: 'J', trail: 120, spring: 200, terrain: 'louka, chráněná kotlina' },
+    { lat: 50.0712, lng: 17.2089, score: 'green', name: 'Louka nad Ovčárnou', elevation: 1250, slope: 4, orientation: 'JV', trail: 80, spring: 350, terrain: 'louka, smíšený les' },
+    { lat: 50.0634, lng: 17.2445, score: 'yellow', name: 'Hrana Velkého Děda', elevation: 1420, slope: 7, orientation: 'Z', trail: 210, spring: 600, terrain: 'skalnatý, exponovaný' },
+    { lat: 50.0923, lng: 17.1987, score: 'green', name: 'Kotlina u Barborky', elevation: 1180, slope: 3, orientation: 'J', trail: 150, spring: 180, terrain: 'les smíšený' },
+    { lat: 50.0556, lng: 17.2234, score: 'yellow', name: 'Svah Petrovy kameny', elevation: 1490, slope: 9, orientation: 'SZ', trail: 340, spring: 800, terrain: 'skalnatý terén' },
+];
+
+const scoreColors = {
+    green: { fill: '#2d6a4f', border: '#52b788', label: 'Ideální' },
+    yellow: { fill: '#d4a017', border: '#ffd166', label: 'Použitelný' },
+    orange: { fill: '#c1603a', border: '#f4845f', label: 'Hraniční' },
+};
+
+let heatSpotMarkers = [];
+
+function renderHeatSpots() {
+    heatSpotMarkers.forEach(m => map.removeLayer(m));
+    heatSpotMarkers = [];
+
+    mockSpots.forEach(spot => {
+        const colors = scoreColors[spot.score];
+
+        // Velký průhledný kruh - "zóna"
+        const zone = L.circle([spot.lat, spot.lng], {
+            radius: 400,
+            fillColor: colors.fill,
+            fillOpacity: 0.25,
+            color: colors.border,
+            weight: 1.5,
+            opacity: 0.6,
+        }).addTo(map);
+
+        // Malý střed
+        const center = L.circle([spot.lat, spot.lng], {
+            radius: 80,
+            fillColor: colors.fill,
+            fillOpacity: 0.9,
+            color: colors.border,
+            weight: 2,
+            opacity: 1,
+        }).addTo(map);
+
+        // Klik otevře detail
+        center.on('click', () => openSpotDetail(spot));
+        zone.on('click', () => openSpotDetail(spot));
+
+        heatSpotMarkers.push(zone, center);
+    });
+}
+
+function openSpotDetail(spot) {
+    const colors = scoreColors[spot.score];
+    const panel = document.getElementById('spot-detail-panel');
+    
+    document.getElementById('spot-detail-coords').textContent = `${spot.lat.toFixed(4)}°N, ${spot.lng.toFixed(4)}°E`;
+    document.getElementById('spot-detail-score').textContent = colors.label;
+    document.getElementById('spot-detail-score').style.color = colors.border;
+    document.getElementById('spot-detail-elevation').textContent = spot.elevation + ' m';
+    document.getElementById('spot-detail-slope').textContent = spot.slope + '° — ' + (spot.slope <= 5 ? 'Rovný terén — ideální' : spot.slope <= 10 ? 'Mírný svah' : 'Strmý svah');
+    document.getElementById('spot-detail-slope').style.color = spot.slope <= 5 ? '#52b788' : spot.slope <= 10 ? '#ffd166' : '#f4845f';
+    document.getElementById('spot-detail-orientation').textContent = spot.orientation;
+    document.getElementById('spot-detail-trail').textContent = spot.trail + ' m';
+    document.getElementById('spot-detail-spring').textContent = spot.spring + ' m';
+    document.getElementById('spot-detail-terrain').textContent = spot.terrain;
+
+    panel.classList.add('open');
+}
+
+// Zobraz heatmapu hned
+renderHeatSpots();
+
 document.getElementById('locateBtn').addEventListener('click', locateUser);
 
 // HLEDAT V TÉTO OBLASTI
@@ -606,4 +681,41 @@ function closeLayers() {
     document.getElementById('layersBtn').classList.remove('active');
     document.getElementById('layersDropdown').classList.remove('open');
     document.getElementById('overlay').classList.remove('open');
+}
+
+function updateActiveFilterBar() {
+    const bar = document.getElementById('activeFilterBar');
+    const water = document.getElementById('f-water').value;
+    const shelter = document.getElementById('f-shelter').value;
+    const trail = document.getElementById('f-trail') ? document.getElementById('f-trail').value : '';
+    const slope = document.getElementById('f-slope') ? document.getElementById('f-slope').value : '';
+    const orientation = document.getElementById('f-orientation').value;
+    const bivakreg = document.getElementById('f-bivakreg') ? document.getElementById('f-bivakreg').value : '';
+
+    const tags = [];
+    if (slope) tags.push(`sklon <${slope}°`);
+    if (orientation) tags.push(`orientace ${orientation}`);
+    if (trail) tags.push(`od pěšiny do ${trail} m`);
+    if (water) tags.push(`pramen do ${water} m`);
+    if (shelter) tags.push(`přístřešek do ${shelter} m`);
+    if (bivakreg === 'allowed') tags.push('bivak povolen');
+    if (bivakreg === 'restricted') tags.push('bivak s omezením');
+
+    if (tags.length > 0) {
+        bar.style.display = 'flex';
+        bar.innerHTML = tags.map(t => `<span class="filter-tag">${t}</span>`).join('');
+    } else {
+        bar.style.display = 'none';
+    }
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    
+    if (tab === 'map') {
+        toggleFilter();
+    } else if (tab === 'profile') {
+        openUserPanel();
+    }
 }
