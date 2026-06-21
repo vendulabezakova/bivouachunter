@@ -199,9 +199,7 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
 .btn-apply:hover { background: #155a48; }
 
 /* LAYERS DROPDOWN */
-#layersDropdown {
-    padding: 20px 24px;
-}
+#layersDropdown { padding: 20px 24px; }
 
 .layers-grid {
     display: grid;
@@ -229,13 +227,8 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     cursor: pointer;
 }
 
-.layer-item.disabled {
-    opacity: 0.4;
-}
-
-.layer-item.disabled label {
-    cursor: default;
-}
+.layer-item.disabled { opacity: 0.4; }
+.layer-item.disabled label { cursor: default; }
 
 /* OVERLAY */
 .overlay {
@@ -258,11 +251,20 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     transition: opacity 0.3s ease;
 }
 
+/* DESKTOP/MOBILE HELPERS */
+.desktop-only { display: flex; }
+.mobile-only { display: none; }
+
+/* TAB BAR + FLOATING — skryté na desktopu */
+.tab-bar { display: none; }
+.map-floating-btns { display: none; }
+
 /* AUTH STRÁNKY */
 .auth-page {
-    min-height: 100vh;
+    min-height: 100dvh;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    overflow: hidden;
 }
 
 .auth-image {
@@ -337,9 +339,7 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     margin-bottom: 32px;
 }
 
-.form-group {
-    margin-bottom: 16px;
-}
+.form-group { margin-bottom: 16px; }
 
 .form-group label {
     display: block;
@@ -491,9 +491,7 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     pointer-events: none;
 }
 
-.loading-content {
-    text-align: center;
-}
+.loading-content { text-align: center; }
 
 .loading-logo {
     font-size: 28px;
@@ -515,123 +513,12 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     margin: 0 auto 16px;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .loading-text {
     font-size: 14px;
     color: #7aada0;
     font-family: 'Nunito', sans-serif;
-}
-
-/* MOBILNÍ AUTH STRÁNKY */
-@media (max-width: 768px) {
-    .auth-page {
-        grid-template-columns: 1fr;
-        min-height: 100vh;
-        position: relative;
-    }
-
-    .auth-image {
-        display: none;
-    }
-
-    .auth-form-side {
-        background-image: url('/static/spots/img/bivouac-hunter-login.webp');
-        background-size: cover;
-        background-position: center;
-        position: relative;
-        min-height: 100vh;
-        padding: 48px 24px;
-    }
-
-    .auth-form-side::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to bottom, rgba(13,31,26,0.75), rgba(13,31,26,0.90));
-    }
-
-    .auth-box {
-        position: relative;
-        z-index: 1;
-    }
-
-    .auth-logo { font-size: 18px; }
-    .auth-title { font-size: 26px; }
-
-    .form-group input {
-        background: rgba(28, 43, 39, 0.8);
-        border-color: #4a7a6e;
-    }
-
-    .btn-submit {
-        font-size: 17px;
-        padding: 14px;
-    }
-
-    .auth-logo span { color: #4a7a6e; }
-    .auth-subtitle { color: #a0cdc5; }
-}
-
-/* MOBILNÍ NAVBAR */
-@media (max-width: 768px) {
-    .navbar {
-        height: auto;
-        padding: 10px 16px;
-        flex-wrap: nowrap;
-        gap: 8px;
-    }
-
-    .logo { font-size: 16px; white-space: nowrap; }
-
-    .nav-center {
-        flex: 1;
-        justify-content: center;
-    }
-
-    .filter-btn {
-        font-size: 14px;
-        padding: 8px 14px;
-        white-space: nowrap;
-    }
-
-    .nav-right { gap: 6px; }
-
-    .btn-login {
-        font-size: 13px;
-        padding: 7px 12px;
-    }
-
-    .btn-register { display: none; }
-    .user-email { display: none; }
-
-    .user-avatar {
-        width: 32px;
-        height: 32px;
-        font-size: 13px;
-    }
-
-    #map { top: 56px; }
-    .overlay { top: 56px; }
-
-    .filter-dropdown {
-        width: 100%;
-        left: 0;
-        transform: none;
-        border-radius: 0 0 14px 14px;
-        top: 56px;
-    }
-}
-
-/* DESKTOP/MOBILE HELPERS */
-.desktop-only { display: flex; }
-.mobile-only { display: none; }
-
-@media (max-width: 768px) {
-    .desktop-only { display: none !important; }
-    .mobile-only { display: flex !important; }
 }
 
 /* USER AVATAR GUEST */
@@ -776,9 +663,7 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     padding: 20px 20px 40px;
 }
 
-.spot-detail-panel.open {
-    transform: translateY(0);
-}
+.spot-detail-panel.open { transform: translateY(0); }
 
 .spot-detail-header {
     display: flex;
@@ -822,9 +707,7 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     font-size: 14px;
 }
 
-.spot-detail-label {
-    color: #7aada0;
-}
+.spot-detail-label { color: #7aada0; }
 
 .spot-detail-body span:last-child {
     color: #c8e8e2;
@@ -841,19 +724,10 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     line-height: 1.6;
 }
 
-.spot-detail-legal strong {
-    color: #c8e8e2;
-}
+.spot-detail-legal strong { color: #c8e8e2; }
+.spot-detail-legal a { color: #1a6b57; text-decoration: none; }
 
-.spot-detail-legal a {
-    color: #1a6b57;
-    text-decoration: none;
-}
-
-.spot-detail-actions {
-    display: flex;
-    gap: 10px;
-}
+.spot-detail-actions { display: flex; gap: 10px; }
 
 .btn-save {
     flex: 1;
@@ -879,69 +753,75 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
     cursor: pointer;
 }
 
-/* MOBILNÍ FILTR DOLE */
+/* =====================
+   MOBILNÍ STYLY
+   ===================== */
 @media (max-width: 768px) {
-    .filter-dropdown {
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        left: 0;
-        right: 0;
-        width: 100%;
-        transform: translateY(100%);
-        transition: transform 0.3s ease;
-        border-radius: 20px 20px 0 0;
-        border-top: 0.5px solid #2e4a42;
-        display: block !important;
-        max-height: 75vh;
-        overflow-y: auto;
+
+    /* Navbar schovaný, tab bar místo něj */
+    .navbar { display: none; }
+    .desktop-only { display: none !important; }
+    .mobile-only { display: flex !important; }
+
+    /* Mapa přes celou výšku kromě tab baru */
+    #map {
+        top: 0;
+        bottom: 64px;
     }
 
-    .filter-dropdown.open {
-        transform: translateY(0);
-        display: block !important;
+    .overlay { top: 0; }
+
+    /* AUTH */
+    .auth-page {
+        grid-template-columns: 1fr;
+        height: 100dvh;        /* ← bylo min-height: 100vh */
+        min-height: unset;
+        position: relative;
+        overflow: hidden;
     }
 
-    .filter-grid {
-        grid-template-columns: 1fr 1fr;
+    .auth-image { display: none; }
+
+    .auth-form-side {
+        background-image: url('/static/spots/img/bivouac-hunter-login.webp');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        height: 100dvh;
+        overflow: hidden; 
+        padding: 20px 24px 32px;
+        justify-content: flex-start;
+        align-items: stretch;
+        min-height: unset;
     }
 
-    /* AKTIVNÍ FILTR LIŠTA */
-    .active-filter-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 999;
-        background: #0d1f1a;
-        border-top: 0.5px solid #2e4a42;
-        padding: 8px 12px;
-        display: flex;
-        gap: 8px;
-        overflow-x: auto;
-        scrollbar-width: none;
+    .auth-form-side::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(13,31,26,0.75), rgba(13,31,26,0.90));
     }
 
-    .active-filter-bar::-webkit-scrollbar { display: none; }
+    .auth-box { position: relative; z-index: 1; max-width: 100%; }
+    .auth-logo { font-size: 16px; margin-bottom: 24px; }
+    .auth-title { font-size: 22px; }
+    .auth-subtitle { margin-bottom: 16px; color: #a0cdc5; }
+    .form-group { margin-bottom: 10px; }
 
-    .filter-tag {
-        background: #1c2b27;
-        border: 0.5px solid #1a6b57;
-        border-radius: 20px;
-        padding: 5px 12px;
-        font-size: 12px;
-        color: #c8e8e2;
-        white-space: nowrap;
-        font-family: 'Nunito', sans-serif;
-    }
-}
-
-/* MOBILNÍ TAB BAR */
-@media (max-width: 768px) {
-    .navbar {
-        display: none;
+    .form-group input {
+        background: rgba(28, 43, 39, 0.8);
+        border-color: #4a7a6e;
+        padding: 10px 14px;
     }
 
+    .btn-submit { font-size: 16px; padding: 12px; margin-top: 6px; }
+    .divider { margin: 14px 0; }
+    .btn-google { padding: 10px; margin-top: 0; }
+    .auth-footer { margin-top: 16px; }
+    .auth-logo span { color: #4a7a6e; }
+
+
+    /* TAB BAR */
     .tab-bar {
         position: fixed;
         bottom: 0;
@@ -972,9 +852,7 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
         transition: color 0.15s;
     }
 
-    .tab-item.active {
-        color: #52b788;
-    }
+    .tab-item.active { color: #52b788; }
 
     .tab-item svg {
         width: 22px;
@@ -990,6 +868,12 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
         flex-direction: column;
         gap: 10px;
         z-index: 1000;
+        transition: opacity 0.2s;
+    }
+
+    .map-floating-btns.hidden {
+        opacity: 0;
+        pointer-events: none;
     }
 
     .floating-btn {
@@ -1006,12 +890,9 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .floating-btn svg {
-        width: 20px;
-        height: 20px;
-    }
+    .floating-btn svg { width: 20px; height: 20px; }
 
-    /* Filtr panel nad tab barem */
+    /* FILTER DROPDOWN — slide up zdola, nad tab barem */
     .filter-dropdown {
         position: fixed;
         bottom: 64px;
@@ -1028,27 +909,62 @@ body { font-family: 'Nunito', sans-serif; background: #0d1f1a; color: #c8e8e2; }
         overflow-y: auto;
     }
 
-    .filter-dropdown.open {
-        transform: translateY(0);
+    .filter-dropdown.open { transform: translateY(0); }
+
+    .filter-grid { grid-template-columns: 1fr 1fr; }
+
+    /* FILTER HANDLE — čárka nahoře */
+    .filter-handle {
+        width: 36px;
+        height: 4px;
+        background: #4a7a6e;
+        border-radius: 2px;
+        margin: 0 auto 16px;
+        flex-shrink: 0;
+        cursor: grab;
     }
 
-    /* Spot detail panel nad tab barem */
-    .spot-detail-panel {
+    /* AKTIVNÍ FILTR LIŠTA */
+    .active-filter-bar {
+        position: fixed;
         bottom: 64px;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        background: #0d1f1a;
+        border-top: 0.5px solid #2e4a42;
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        scrollbar-width: none;
     }
 
-    /* Map */
-    #map {
-        top: 0;
-        bottom: 64px;
+    .active-filter-bar.hidden { display: none !important; }
+
+    .active-filter-bar::-webkit-scrollbar { display: none; }
+
+    .filter-tags-row {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        width: 100%;
     }
 
-    .overlay {
-        top: 0;
-    }
-}
+    .filter-tags-row::-webkit-scrollbar { display: none; }
 
-/* Desktop - tab bar schovaný */
-.tab-bar {
-    display: none;
+    .filter-tag {
+        background: #1c2b27;
+        border: 0.5px solid #1a6b57;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 12px;
+        color: #c8e8e2;
+        white-space: nowrap;
+        font-family: 'Nunito', sans-serif;
+    }
+
+    /* SPOT DETAIL PANEL — nad tab barem */
+    .spot-detail-panel { bottom: 64px; }
 }

@@ -82,120 +82,123 @@
         </div>
     </nav>
 
+    <!-- FILTER DROPDOWN -->
     <div class="filter-dropdown" id="filterDropdown">
-    <div class="filter-grid">
-        <div class="filter-group">
-            <label>Zdroj vody</label>
-            <select id="f-water">
-                <option value="">Vše</option>
-                <option value="500">do 500 m</option>
-                <option value="1000">do 1 km</option>
-                <option value="2000">do 2 km</option>
-            </select>
+        <div class="filter-handle"></div>
+            <div class="filter-grid">
+            <div class="filter-group">
+                <label for="f-water">Zdroj vody</label>
+                <select id="f-water">
+                    <option value="">Vše</option>
+                    <option value="500">do 500 m</option>
+                    <option value="1000">do 1 km</option>
+                    <option value="2000">do 2 km</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="f-shelter">Přístřešek</label>
+                <select id="f-shelter">
+                    <option value="">Vše</option>
+                    <option value="500">do 500 m</option>
+                    <option value="1000">do 1 km</option>
+                    <option value="2000">do 2 km</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="f-trail">Od pěšiny</label>
+                <select id="f-trail">
+                    <option value="">Vše</option>
+                    <option value="50">do 50 m</option>
+                    <option value="150">do 150 m</option>
+                    <option value="300">do 300 m</option>
+                    <option value="500">do 500 m</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="f-slope">Sklon terénu</label>
+                <select id="f-slope">
+                    <option value="">Vše</option>
+                    <option value="5">do 5°</option>
+                    <option value="8">do 8°</option>
+                    <option value="12">do 12°</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="f-orientation">Orientace svahu</label>
+                <select id="f-orientation">
+                    <option value="">Vše</option>
+                    <option value="N">Sever</option>
+                    <option value="NE">Severovýchod</option>
+                    <option value="E">Východ</option>
+                    <option value="SE">Jihovýchod</option>
+                    <option value="S">Jih</option>
+                    <option value="SW">Jihozápad</option>
+                    <option value="W">Západ</option>
+                    <option value="NW">Severozápad</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="f-bivakreg">Podmínky bivaku</label>
+                <select id="f-bivakreg">
+                    <option value="">Vše</option>
+                    <option value="allowed">Povoleno</option>
+                    <option value="restricted">S omezením</option>
+                    <option value="forbidden">Zakázáno</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="f-elevation">Nadm. výška (min. m)</label>
+                <input type="number" id="f-elevation" placeholder="např. 800" min="0" max="2500">
+            </div>
+            <div class="filter-group" style="opacity: 0.4;">
+                <label for="f-terrain">Terén</label>
+                <select id="f-terrain" disabled>
+                    <option value="">– již brzy –</option>
+                </select>
+            </div>
         </div>
-        <div class="filter-group">
-            <label>Přístřešek</label>
-            <select id="f-shelter">
-                <option value="">Vše</option>
-                <option value="500">do 500 m</option>
-                <option value="1000">do 1 km</option>
-                <option value="2000">do 2 km</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>Od pěšiny</label>
-            <select id="f-trail">
-                <option value="">Vše</option>
-                <option value="50">do 50 m</option>
-                <option value="150">do 150 m</option>
-                <option value="300">do 300 m</option>
-                <option value="500">do 500 m</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>Sklon terénu</label>
-            <select id="f-slope">
-                <option value="">Vše</option>
-                <option value="5">do 5°</option>
-                <option value="8">do 8°</option>
-                <option value="12">do 12°</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>Orientace svahu</label>
-            <select id="f-orientation">
-                <option value="">Vše</option>
-                <option value="N">Sever</option>
-                <option value="NE">Severovýchod</option>
-                <option value="E">Východ</option>
-                <option value="SE">Jihovýchod</option>
-                <option value="S">Jih</option>
-                <option value="SW">Jihozápad</option>
-                <option value="W">Západ</option>
-                <option value="NW">Severozápad</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>Podmínky bivaku</label>
-            <select id="f-bivakreg">
-                <option value="">Vše</option>
-                <option value="allowed">Povoleno</option>
-                <option value="restricted">S omezením</option>
-                <option value="forbidden">Zakázáno</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>Nadm. výška (min. m)</label>
-            <input type="number" id="f-elevation" placeholder="např. 800" min="0" max="2500">
-        </div>
-        <div class="filter-group" style="opacity: 0.4;">
-            <label>Terén</label>
-            <select id="f-terrain" disabled>
-                <option value="">– již brzy –</option>
-            </select>
-        </div>
-    </div>
         <div class="filter-footer">
             <button class="btn-reset" onclick="resetFilters()">Zrušit filtry</button>
             <button class="btn-apply" onclick="applyFilters()">Zobrazit místa</button>
         </div>
     </div>
 
+    <!-- LAYERS DROPDOWN -->
     <div class="filter-dropdown" id="layersDropdown">
         <div class="layers-grid">
             <div class="layer-item">
-                <label>
+                <label for="l-topo">
                     <input type="checkbox" id="l-topo" onchange="toggleLayer('topo')">
                     Vrstevnice
                 </label>
             </div>
             <div class="layer-item">
-                <label>
+                <label for="l-rescue">
                     <input type="checkbox" id="l-rescue" onchange="toggleLayer('rescue')">
                     Stanice horské služby
                 </label>
             </div>
             <div class="layer-item disabled">
-                <label>
-                    <input type="checkbox" disabled>
+                <label for="l-sleep">
+                    <input type="checkbox" id="l-sleep" disabled>
                     Spoty na spaní <span class="soon-tag">brzy</span>
                 </label>
             </div>
             <div class="layer-item disabled">
-                <label>
-                    <input type="checkbox" disabled>
+                <label for="l-radar">
+                    <input type="checkbox" id="l-radar" disabled>
                     Radar <span class="soon-tag">brzy</span>
                 </label>
             </div>
             <div class="layer-item disabled">
-                <label>
-                    <input type="checkbox" disabled>
+                <label for="l-wind">
+                    <input type="checkbox" id="l-wind" disabled>
                     Proudění vzduchu <span class="soon-tag">brzy</span>
                 </label>
             </div>
             <div class="layer-item disabled">
-                <label>
-                    <input type="checkbox" disabled>
+                <label for="l-zones">
+                    <input type="checkbox" id="l-zones" disabled>
                     Zakázané zóny <span class="soon-tag">brzy</span>
                 </label>
             </div>
@@ -212,109 +215,109 @@
 
     <div id="map"></div>
 
-<!-- SPOT DETAIL PANEL -->
-<div class="spot-detail-panel" id="spot-detail-panel">
-    <div class="spot-detail-header">
-        <div>
-            <div class="spot-detail-coords" id="spot-detail-coords"></div>
-            <span class="spot-detail-type">Bivak</span>
+    <!-- SPOT DETAIL PANEL -->
+    <div class="spot-detail-panel" id="spot-detail-panel">
+        <div class="spot-detail-header">
+            <div>
+                <div class="spot-detail-coords" id="spot-detail-coords"></div>
+                <span class="spot-detail-type">Bivak</span>
+            </div>
+            <button class="spot-detail-close" onclick="document.getElementById('spot-detail-panel').classList.remove('open')">✕</button>
         </div>
-        <button class="spot-detail-close" onclick="document.getElementById('spot-detail-panel').classList.remove('open')">✕</button>
+        <div class="spot-detail-body">
+            <div class="spot-detail-row">
+                <span class="spot-detail-label">Skóre</span>
+                <span id="spot-detail-score"></span>
+            </div>
+            <div class="spot-detail-row">
+                <span class="spot-detail-label">Nadmořská výška</span>
+                <span id="spot-detail-elevation"></span>
+            </div>
+            <div class="spot-detail-row">
+                <span class="spot-detail-label">Sklon terénu</span>
+                <span id="spot-detail-slope"></span>
+            </div>
+            <div class="spot-detail-row">
+                <span class="spot-detail-label">Orientace svahu</span>
+                <span id="spot-detail-orientation"></span>
+            </div>
+            <div class="spot-detail-row">
+                <span class="spot-detail-label">Vzdálenost od pěšiny</span>
+                <span id="spot-detail-trail"></span>
+            </div>
+            <div class="spot-detail-row">
+                <span class="spot-detail-label">Pramen</span>
+                <span id="spot-detail-spring"></span>
+            </div>
+            <div class="spot-detail-row">
+                <span class="spot-detail-label">Typ terénu</span>
+                <span id="spot-detail-terrain"></span>
+            </div>
+        </div>
+        <div class="spot-detail-legal">
+            <strong>§ CHKO Jeseníky</strong> — Bivakování povoleno. Zákaz otevřeného ohně.<br>
+            <a href="#">Pravidla pro tuto oblast →</a>
+        </div>
+        <div class="spot-detail-actions">
+            <button class="btn-save">♡ Uložit</button>
+            <button class="btn-visited">✓ Navštíveno</button>
+        </div>
     </div>
-    <div class="spot-detail-body">
-        <div class="spot-detail-row">
-            <span class="spot-detail-label">Skóre</span>
-            <span id="spot-detail-score"></span>
-        </div>
-        <div class="spot-detail-row">
-            <span class="spot-detail-label">Nadmořská výška</span>
-            <span id="spot-detail-elevation"></span>
-        </div>
-        <div class="spot-detail-row">
-            <span class="spot-detail-label">Sklon terénu</span>
-            <span id="spot-detail-slope"></span>
-        </div>
-        <div class="spot-detail-row">
-            <span class="spot-detail-label">Orientace svahu</span>
-            <span id="spot-detail-orientation"></span>
-        </div>
-        <div class="spot-detail-row">
-            <span class="spot-detail-label">Vzdálenost od pěšiny</span>
-            <span id="spot-detail-trail"></span>
-        </div>
-        <div class="spot-detail-row">
-            <span class="spot-detail-label">Pramen</span>
-            <span id="spot-detail-spring"></span>
-        </div>
-        <div class="spot-detail-row">
-            <span class="spot-detail-label">Typ terénu</span>
-            <span id="spot-detail-terrain"></span>
-        </div>
+
+    <!-- AKTIVNÍ FILTRY LIŠTA (mobil) -->
+    <div class="active-filter-bar" id="activeFilterBar" style="display:none;">
+        <div class="filter-handle"></div>
+        <div class="filter-tags-row" id="filterTagsRow"></div>
     </div>
-    <div class="spot-detail-legal">
-        <strong>§ CHKO Jeseníky</strong> — Bivakování povoleno. Zákaz otevřeného ohně.<br>
-        <a href="#">Pravidla pro tuto oblast →</a>
+
+    <!-- TAB BAR (mobil) -->
+    <div class="tab-bar">
+        <button class="tab-item active" id="tab-map" onclick="switchTab('map')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+                <line x1="9" y1="3" x2="9" y2="18"/>
+                <line x1="15" y1="6" x2="15" y2="21"/>
+            </svg>
+            Mapa
+        </button>
+        <button class="tab-item" id="tab-saved" onclick="switchTab('saved')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            Oblíbené
+        </button>
+        <button class="tab-item" id="tab-weather" onclick="switchTab('weather')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/>
+            </svg>
+            Počasí
+        </button>
+        <button class="tab-item" id="tab-profile" onclick="switchTab('profile')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Profil
+        </button>
     </div>
-    <div class="spot-detail-actions">
-        <button class="btn-save">♡ Uložit</button>
-        <button class="btn-visited">✓ Navštíveno</button>
+
+    <!-- FLOATING TLAČÍTKA (mobil) -->
+    <div class="map-floating-btns" id="mapFloatingBtns">
+        <button class="floating-btn" onclick="locateUser()" title="Moje poloha">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                <circle cx="12" cy="12" r="9" stroke-opacity="0.3"/>
+            </svg>
+        </button>
+        <button class="floating-btn" onclick="toggleLayers()" title="Vrstvy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+            </svg>
+        </button>
     </div>
-</div>
-
-<!-- AKTIVNÍ FILTRY LIŠTA (mobil) -->
-<div class="active-filter-bar" id="activeFilterBar" style="display:none;">
-</div>
-
-
-<!-- TAB BAR (mobil) -->
-<div class="tab-bar">
-    <button class="tab-item active" id="tab-map" onclick="switchTab('map')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
-            <line x1="9" y1="3" x2="9" y2="18"/>
-            <line x1="15" y1="6" x2="15" y2="21"/>
-        </svg>
-        Mapa
-    </button>
-    <button class="tab-item" id="tab-saved" onclick="switchTab('saved')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        Oblíbené
-    </button>
-    <button class="tab-item" id="tab-weather" onclick="switchTab('weather')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/>
-        </svg>
-        Počasí
-    </button>
-    <button class="tab-item" id="tab-profile" onclick="switchTab('profile')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-        </svg>
-        Profil
-    </button>
-</div>
-
-<!-- FLOATING TLAČÍTKA (mobil) -->
-<div class="map-floating-btns">
-    <button class="floating-btn" onclick="locateUser()" title="Moje poloha">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
-            <circle cx="12" cy="12" r="9" stroke-opacity="0.3"/>
-        </svg>
-    </button>
-    <button class="floating-btn" onclick="toggleLayers()" title="Vrstvy">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-            <polyline points="2 17 12 22 22 17"/>
-            <polyline points="2 12 12 17 22 12"/>
-        </svg>
-    </button>
-</div>
-
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
